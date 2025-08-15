@@ -2,12 +2,16 @@
   "{{"
   "{{-"
   "{{+"
+  "{{~"
+  "~}}"
   "+}}"
   "-}}"
   "}}"
   "{%"
   "{%-"
   "{%+"
+  "{%~"
+  "~%}"
   "+%}"
   "-%}"
   "%}"
@@ -15,7 +19,7 @@
 
 (string_literal) @string
 
-(integer_literal) @number
+(number_literal) @number
 
 (boolean_literal) @boolean
 
@@ -24,6 +28,7 @@
 [
   ","
   "."
+  "::"
 ] @punctuation.delimiter
 
 [
@@ -32,6 +37,11 @@
   "["
   "]"
 ] @punctuation.bracket
+
+[
+  "|"
+  "="
+] @operator
 
 [
   "is"
@@ -52,7 +62,6 @@
   ">"
   "=="
   "!="
-  "="
 ] @operator
 
 [
@@ -66,15 +75,20 @@
   "macro"
   "call"
   "import"
+  "as"
+  "with"
+  "defined"
 ] @keyword
 
 [
   "endblock"
-  "endfilter"
-  "endmatch"
-  "endwhen"
   "endmacro"
 ] @keyword
+
+; End statement
+(endfilter_statement) @keyword
+(endmatch_statement) @keyword
+(endwhen_statement) @keyword
 
 [
   "if"
@@ -87,8 +101,92 @@
 [
   "for"
   "in"
-  "endfor"
+  (endfor_statement)
 ] @keyword.repeat
 
+
+; Function calls
 (call_expression
+  function: (identifier) @function.call)
+
+(call_expression
+  function: (path_expression) @function.call)
+
+(call_expression
+  function: (field_access_expression
+    field: (identifier) @function.call))
+
+; Macro calls
+(macro_call_statement
   (identifier) @function.call)
+
+(macro_call_statement
+  (path_expression) @function.call)
+
+(macro_call_statement
+  (field_access_expression
+    field: (identifier) @function.call))
+
+; Filter names
+(filter
+  name: (identifier) @function.builtin)
+
+; Macro definitions
+(macro_statement
+  (identifier) @function.method)
+
+; Block names
+(block_statement
+  (identifier) @tag)
+
+(endblock_statement
+  (identifier) @tag)
+
+; Variables and identifiers
+(let_statement
+  (identifier) @variable)
+
+(let_statement
+  (tuple_pattern
+    (identifier) @variable))
+
+(for_statement
+  (identifier) @variable)
+
+(for_statement
+  (tuple_pattern
+    (identifier) @variable))
+
+; Field access
+(field_access_expression
+  object: (identifier) @variable
+  field: (identifier) @property)
+
+; Include and import paths
+(extends_statement
+  (string_literal) @string.special.path)
+
+(include_statement
+  (string_literal) @string.special.path)
+
+(import_statement
+  (string_literal) @string.special.path)
+
+; Import aliases
+(import_statement
+  (identifier) @variable)
+
+; Pattern matching
+(pattern
+  (identifier) @variable)
+
+(destructure_element
+  (identifier) @variable)
+
+; Path expressions (module::function)
+(path_expression
+  (identifier) @module
+  (identifier) @function .)
+
+; Wildcard
+"_" @variable.builtin
