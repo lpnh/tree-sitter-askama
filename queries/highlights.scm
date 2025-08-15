@@ -23,7 +23,7 @@
 
 [
   ","
-  ; "."
+  "."
 ] @punctuation.delimiter
 
 [

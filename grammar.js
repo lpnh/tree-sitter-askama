@@ -8,7 +8,8 @@
 // @ts-check
 
 const PREC = {
-  function_calls: 9,
+  function_calls: 10,
+  filter: 9,
   multiplicative: 8,
   additive: 7,
   bitand: 6,
@@ -57,20 +58,16 @@ module.exports = grammar({
         $.block_statement,
         $.endblock_statement,
         $.filter_statement,
-        'endfilter',
+        $.endfilter_statement,
         $.extends_statement,
         $.let_statement,
         $.for_statement,
-        'endfor',
-        $.if_expression,
-        $.if_let_expression,
-        $.else_if_expression,
-        'else',
-        'endif',
+        $.endfor_statement,
+        $.conditional_statement,
         $.match_statement,
-        'endmatch',
+        $.endmatch_statement,
         $.when_statement,
-        'endwhen',
+        $.endwhen_statement,
         $.include_statement,
         $.macro_statement,
         $.endmacro_statement,
@@ -82,59 +79,85 @@ module.exports = grammar({
 
     endblock_statement: $ => seq('endblock', optional($.identifier)),
 
-    filter_statement: $ => seq('filter', $.identifier),
+    filter_statement: $ => seq('filter', $.filter_chain),
+
+    endfilter_statement: _ => 'endfilter',
 
     extends_statement: $ => seq('extends', $.string_literal),
 
     let_statement: $ =>
       seq(
         choice('let', 'set'),
-        $.identifier,
+        choice($.identifier, $.tuple_pattern),
         optional(seq('=', $._expression)),
       ),
 
-    for_statement: $ => seq('for', $.identifier, 'in', $.identifier),
+    for_statement: $ =>
+      seq('for', choice($.identifier, $.tuple_pattern), 'in', $._expression),
 
-    if_expression: $ => seq('if', $._expression),
+    endfor_statement: _ => 'endfor',
 
-    if_let_expression: $ => seq('if let', $._expression),
+    conditional_statement: $ =>
+      choice(
+        seq('if', $._expression),
+        seq('if', 'let', $._expression),
+        seq(choice('else if', 'elif'), $._expression),
+        'else',
+        'endif',
+      ),
 
-    else_if_expression: $ => seq(choice('else if', 'elif'), $._expression),
+    match_statement: $ => seq('match', $._expression),
 
-    match_statement: $ => seq('match', $.identifier),
+    endmatch_statement: _ => 'endmatch',
 
-    when_statement: $ => seq('when', $._expression),
+    when_statement: $ =>
+      seq(
+        'when',
+        field('pattern', $.pattern),
+        optional(seq('with', field('destructure', $.pattern_destructure))),
+      ),
+
+    endwhen_statement: _ => 'endwhen',
+
+    pattern: $ => choice($._primary_expression, '_'),
+
+    pattern_destructure: $ =>
+      choice(
+        seq('(', sepByComma($.destructure_element), ')'),
+        seq('[', sepByComma($.destructure_element), ']'),
+      ),
+
+    destructure_element: $ =>
+      choice(
+        $.identifier,
+        $.string_literal,
+        $.number_literal,
+        $.boolean_literal,
+        '_',
+      ),
 
     include_statement: $ => seq('include', $.string_literal),
 
     macro_statement: $ =>
       seq('macro', $.identifier, '(', optional($.parameter_list), ')'),
-
     endmacro_statement: $ => seq('endmacro', optional($.identifier)),
 
-    macro_call_statement: $ =>
-      seq(
-        'call',
-        choice($.identifier, $.scoped_identifier),
-        '(',
-        optional($.argument_list),
-        ')',
-      ),
+    macro_call_statement: $ => seq('call', $._callable, $.arguments),
 
     import_statement: $ => seq('import', $.string_literal, 'as', $.identifier),
 
-    parameter_list: $ => seq($.identifier, repeat(seq(',', $.identifier))),
-
-    argument_list: $ => seq($._expression, repeat(seq(',', $._expression))),
+    parameter_list: $ => sepByComma($.identifier),
 
     _expression: $ =>
       choice(
         $.binary_expression,
         $.is_defined_expression,
+        $.filter_expression,
         $.call_expression,
+        $.field_access_expression,
         $.tuple_expression,
         $.unit_expression,
-        seq('(', $._expression, ')'),
+        $.parenthesized_expression,
         $.array_expression,
         $._primary_expression,
       ),
@@ -170,13 +193,75 @@ module.exports = grammar({
     is_defined_expression: $ =>
       seq($.identifier, choice('is', 'is not'), 'defined'),
 
+    filter_expression: $ =>
+      prec.left(
+        PREC.filter,
+        seq(field('value', $._expression), field('filters', $.filter_chain)),
+      ),
+
+    filter_chain: $ =>
+      prec.left(PREC.filter, seq('|', $.filter, repeat(seq('|', $.filter)))),
+
+    filter: $ =>
+      seq(
+        field('name', $.identifier),
+        field('arguments', optional($.filter_arguments)),
+      ),
+
+    filter_arguments: $ =>
+      seq(
+        '(',
+        optional(
+          seq(
+            sepByComma(choice($.filter_named_argument, $._expression)),
+            optional(','),
+          ),
+        ),
+        ')',
+      ),
+
+    filter_named_argument: $ =>
+      seq(field('name', $.identifier), '=', field('value', $._expression)),
+
     call_expression: $ =>
       prec(
         PREC.function_calls,
-        seq(field('function', $.identifier), field('arguments', $.arguments)),
+        seq(field('function', $._callable), field('arguments', $.arguments)),
       ),
 
+    _callable: $ =>
+      choice($.identifier, $.path_expression, $.field_access_expression),
+
+    field_access_expression: $ =>
+      prec.left(
+        PREC.function_calls,
+        seq(
+          field('object', $._field_access_base),
+          '.',
+          field('field', choice($.identifier, $.number_literal)),
+        ),
+      ),
+
+    _field_access_base: $ =>
+      choice(
+        $.identifier,
+        $.field_access_expression,
+        $.call_expression,
+        $.parenthesized_expression,
+      ),
+
+    path_expression: $ => seq($.identifier, repeat1(seq('::', $.identifier))),
+
     arguments: $ => seq('(', optional(sepByComma($._expression)), ')'),
+
+    parenthesized_expression: $ => seq('(', $._expression, ')'),
+
+    tuple_pattern: $ =>
+      seq(
+        '(',
+        seq($.identifier, repeat(seq(',', $.identifier)), optional(',')),
+        ')',
+      ),
 
     tuple_expression: $ =>
       seq(
@@ -195,18 +280,17 @@ module.exports = grammar({
     _primary_expression: $ =>
       choice(
         $.identifier,
-        $.integer_literal,
+        $.path_expression,
+        $.number_literal,
         $.boolean_literal,
         $.string_literal,
       ),
 
-    integer_literal: _ => /\d+(\.\d+)?/,
+    number_literal: _ => /\d+(\.\d+)?/,
 
     boolean_literal: _ => choice('true', 'false'),
 
-    scoped_identifier: $ => seq($.identifier, '::', $.identifier),
-
-    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*!?/,
 
     string_literal: _ =>
       choice(
