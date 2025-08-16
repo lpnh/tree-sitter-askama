@@ -119,8 +119,8 @@ module.exports = grammar({
 
     pattern_destructure: $ =>
       choice(
-        seq('(', sepByComma($.destructure_element), ')'),
-        seq('[', sepByComma($.destructure_element), ']'),
+        seq('(', sepBy1($.destructure_element, ','), ')'),
+        seq('[', sepBy1($.destructure_element, ','), ']'),
       ),
 
     destructure_element: $ =>
@@ -139,7 +139,7 @@ module.exports = grammar({
         'macro',
         $.identifier,
         '(',
-        optional(sepByComma(choice($.named_argument, $.identifier))),
+        optional(sepBy1(choice($.named_argument, $.identifier), ',')),
         ')',
       ),
 
@@ -150,7 +150,7 @@ module.exports = grammar({
         PREC.macro_calls,
         seq(
           'call',
-          optional(seq('(', sepByComma($.identifier), ')')),
+          optional(seq('(', sepBy1($.identifier, ','), ')')),
           $.call_expression,
         ),
       ),
@@ -211,8 +211,7 @@ module.exports = grammar({
         seq(field('value', $._expression), field('filters', $.filter_chain)),
       ),
 
-    filter_chain: $ =>
-      prec.left(PREC.filter, seq('|', $.filter, repeat(seq('|', $.filter)))),
+    filter_chain: $ => prec.left(PREC.filter, seq('|', sepBy1($.filter, '|'))),
 
     filter: $ =>
       seq(
@@ -225,7 +224,7 @@ module.exports = grammar({
         '(',
         optional(
           seq(
-            sepByComma(choice($.named_argument, $._expression)),
+            sepBy1(choice($.named_argument, $._expression), ','),
             optional(','),
           ),
         ),
@@ -235,33 +234,40 @@ module.exports = grammar({
     named_argument: $ =>
       seq(field('name', $.identifier), '=', field('value', $._expression)),
 
-    arguments: $ => seq('(', optional(sepByComma($._expression)), ')'),
+    arguments: $ => seq('(', optional(sepBy1($._expression, ',')), ')'),
 
     call_expression: $ =>
       prec(
         PREC.function_calls,
-        seq(field('function', $._callable), field('arguments', $.arguments)),
+        seq(
+          field(
+            'function',
+            choice(
+              $.identifier,
+              $.path_expression,
+              $.field_access_expression,
+            ),
+          ),
+          field('arguments', $.arguments),
+        ),
       ),
-
-    _callable: $ =>
-      choice($.identifier, $.path_expression, $.field_access_expression),
 
     field_access_expression: $ =>
       prec.left(
         PREC.function_calls,
         seq(
-          field('object', $._field_access_base),
+          field(
+            'object',
+            choice(
+              $.identifier,
+              $.field_access_expression,
+              $.call_expression,
+              $.parenthesized_expression,
+            ),
+          ),
           '.',
           field('field', choice($.identifier, $.number_literal)),
         ),
-      ),
-
-    _field_access_base: $ =>
-      choice(
-        $.identifier,
-        $.field_access_expression,
-        $.call_expression,
-        $.parenthesized_expression,
       ),
 
     path_expression: $ => seq($.identifier, repeat1(seq('::', $.identifier))),
@@ -269,25 +275,22 @@ module.exports = grammar({
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
     tuple_pattern: $ =>
-      seq(
-        '(',
-        seq($.identifier, repeat(seq(',', $.identifier)), optional(',')),
-        ')',
-      ),
+      seq('(', sepBy1($.identifier, ','), optional(','), ')'),
 
     tuple_expression: $ =>
       seq(
         '(',
-        seq($._expression, ','),
-        repeat(seq($._expression, ',')),
-        optional($._expression),
+        $._expression,
+        ',',
+        optional(sepBy1($._expression, ',')),
+        optional(','),
         ')',
       ),
 
     unit_expression: _ => seq('(', ')'),
 
     array_expression: $ =>
-      seq('[', optional(seq(sepByComma($._expression), optional(','))), ']'),
+      seq('[', optional(seq(sepBy1($._expression, ','), optional(','))), ']'),
 
     _primary_expression: $ =>
       choice(
@@ -311,6 +314,6 @@ module.exports = grammar({
   },
 })
 
-function sepByComma(rule) {
-  return seq(rule, repeat(seq(',', rule)))
+function sepBy1(rule, separator) {
+  return seq(rule, repeat(seq(separator, rule)))
 }
