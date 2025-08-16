@@ -89,6 +89,7 @@
 (endfilter_statement) @keyword
 (endmatch_statement) @keyword
 (endwhen_statement) @keyword
+(endcall_statement) @keyword
 
 [
   "if"
@@ -119,13 +120,6 @@
 ; Macro calls
 (macro_call_statement
   (identifier) @function.call)
-
-(macro_call_statement
-  (path_expression) @function.call)
-
-(macro_call_statement
-  (field_access_expression
-    field: (identifier) @function.call))
 
 ; Filter names
 (filter
