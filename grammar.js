@@ -8,7 +8,8 @@
 // @ts-check
 
 const PREC = {
-  function_calls: 10,
+  function_calls: 11,
+  macro_calls: 10,
   filter: 9,
   multiplicative: 8,
   additive: 7,
@@ -66,6 +67,7 @@ module.exports = grammar({
         $.macro_statement,
         $.endmacro_statement,
         $.macro_call_statement,
+        $.endcall_statement,
         $.import_statement,
       ),
 
@@ -133,14 +135,29 @@ module.exports = grammar({
     include_statement: $ => seq('include', $.string_literal),
 
     macro_statement: $ =>
-      seq('macro', $.identifier, '(', optional($.parameter_list), ')'),
+      seq(
+        'macro',
+        $.identifier,
+        '(',
+        optional(sepByComma(choice($.named_argument, $.identifier))),
+        ')',
+      ),
+
     endmacro_statement: $ => seq('endmacro', optional($.identifier)),
 
-    macro_call_statement: $ => seq('call', $._callable, $.arguments),
+    macro_call_statement: $ =>
+      prec(
+        PREC.macro_calls,
+        seq(
+          'call',
+          optional(seq('(', sepByComma($.identifier), ')')),
+          $.call_expression,
+        ),
+      ),
+
+    endcall_statement: _ => 'endcall',
 
     import_statement: $ => seq('import', $.string_literal, 'as', $.identifier),
-
-    parameter_list: $ => sepByComma($.identifier),
 
     _expression: $ =>
       choice(
@@ -153,6 +170,7 @@ module.exports = grammar({
         $.unit_expression,
         $.parenthesized_expression,
         $.array_expression,
+        $.path_expression,
         $._primary_expression,
       ),
 
@@ -207,15 +225,17 @@ module.exports = grammar({
         '(',
         optional(
           seq(
-            sepByComma(choice($.filter_named_argument, $._expression)),
+            sepByComma(choice($.named_argument, $._expression)),
             optional(','),
           ),
         ),
         ')',
       ),
 
-    filter_named_argument: $ =>
+    named_argument: $ =>
       seq(field('name', $.identifier), '=', field('value', $._expression)),
+
+    arguments: $ => seq('(', optional(sepByComma($._expression)), ')'),
 
     call_expression: $ =>
       prec(
@@ -246,8 +266,6 @@ module.exports = grammar({
 
     path_expression: $ => seq($.identifier, repeat1(seq('::', $.identifier))),
 
-    arguments: $ => seq('(', optional(sepByComma($._expression)), ')'),
-
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
     tuple_pattern: $ =>
@@ -274,7 +292,6 @@ module.exports = grammar({
     _primary_expression: $ =>
       choice(
         $.identifier,
-        $.path_expression,
         $.number_literal,
         $.boolean_literal,
         $.string_literal,

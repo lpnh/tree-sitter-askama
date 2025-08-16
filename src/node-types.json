@@ -490,6 +490,10 @@
           "named": true
         },
         {
+          "type": "endcall_statement",
+          "named": true
+        },
+        {
           "type": "endfilter_statement",
           "named": true
         },
@@ -725,15 +729,15 @@
           "named": true
         },
         {
-          "type": "filter_named_argument",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
         {
           "type": "is_defined_expression",
+          "named": true
+        },
+        {
+          "type": "named_argument",
           "named": true
         },
         {
@@ -788,84 +792,6 @@
         "types": [
           {
             "type": "filter_chain",
-            "named": true
-          }
-        ]
-      },
-      "value": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "array_expression",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "boolean_literal",
-            "named": true
-          },
-          {
-            "type": "call_expression",
-            "named": true
-          },
-          {
-            "type": "field_access_expression",
-            "named": true
-          },
-          {
-            "type": "filter_expression",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "is_defined_expression",
-            "named": true
-          },
-          {
-            "type": "number_literal",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "path_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          },
-          {
-            "type": "tuple_expression",
-            "named": true
-          },
-          {
-            "type": "unit_expression",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "filter_named_argument",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
             "named": true
           }
         ]
@@ -1149,19 +1075,11 @@
       "required": true,
       "types": [
         {
-          "type": "arguments",
-          "named": true
-        },
-        {
-          "type": "field_access_expression",
+          "type": "call_expression",
           "named": true
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "path_expression",
           "named": true
         }
       ]
@@ -1180,7 +1098,7 @@
           "named": true
         },
         {
-          "type": "parameter_list",
+          "type": "named_argument",
           "named": true
         }
       ]
@@ -1254,18 +1172,81 @@
     }
   },
   {
-    "type": "parameter_list",
+    "type": "named_argument",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_expression",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "field_access_expression",
+            "named": true
+          },
+          {
+            "type": "filter_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "is_defined_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "path_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "tuple_expression",
+            "named": true
+          },
+          {
+            "type": "unit_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1368,10 +1349,6 @@
         },
         {
           "type": "number_literal",
-          "named": true
-        },
-        {
-          "type": "path_expression",
           "named": true
         },
         {
@@ -1768,6 +1745,10 @@
   {
     "type": "endblock",
     "named": false
+  },
+  {
+    "type": "endcall_statement",
+    "named": true
   },
   {
     "type": "endfilter_statement",
