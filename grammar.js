@@ -19,6 +19,7 @@ const PREC = {
   comparative: 3,
   and: 2,
   or: 1,
+  content: -1,
 }
 
 module.exports = grammar({
@@ -26,13 +27,19 @@ module.exports = grammar({
 
   extras: _ => [/\s/],
 
+  externals: $ => [$._nested_comment_token],
+
+  conflicts: $ => [[$.pattern, $._primary_expression]],
+
   rules: {
     source: $ =>
       repeat(choice($.control_tag, $.render_expression, $.comment, $.content)),
 
-    content: _ => token(prec(0, /[^{]+/)),
+    content: _ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
 
-    comment: $ => seq('{#', repeat(choice($.comment, /[^#]+/, /#[^}]/)), '#}'),
+    comment: $ => seq('{#', $._nested_comment, '#}'),
+
+    _nested_comment: $ => $._nested_comment_token,
 
     control_tag: $ =>
       seq(
@@ -115,7 +122,7 @@ module.exports = grammar({
 
     endwhen_statement: _ => 'endwhen',
 
-    pattern: $ => choice($._primary_expression, '_'),
+    pattern: $ => choice($._primary_expression, $.identifier, '_'),
 
     pattern_destructure: $ =>
       choice(
@@ -164,26 +171,19 @@ module.exports = grammar({
         $.binary_expression,
         $.is_defined_expression,
         $.filter_expression,
-        $.call_expression,
-        $.field_access_expression,
-        $.tuple_expression,
-        $.unit_expression,
-        $.parenthesized_expression,
-        $.array_expression,
-        $.path_expression,
-        $._primary_expression,
+        $._postfix_expression,
       ),
 
     binary_expression: $ => {
       const table = [
-        [PREC.multiplicative, choice('*', '/', '%')],
-        [PREC.additive, choice('+', '-')],
-        [PREC.bitand, 'bitand'],
-        [PREC.bitor, 'bitor'],
-        [PREC.xor, 'xor'],
-        [PREC.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
-        [PREC.and, '&&'],
         [PREC.or, '||'],
+        [PREC.and, '&&'],
+        [PREC.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
+        [PREC.xor, 'xor'],
+        [PREC.bitor, 'bitor'],
+        [PREC.bitand, 'bitand'],
+        [PREC.additive, choice('+', '-')],
+        [PREC.multiplicative, choice('*', '/', '%')],
       ]
 
       return choice(
@@ -203,12 +203,15 @@ module.exports = grammar({
     },
 
     is_defined_expression: $ =>
-      seq($.identifier, choice('is', 'is not'), 'defined'),
+      seq($._postfix_expression, choice('is', 'is not'), 'defined'),
 
     filter_expression: $ =>
       prec.left(
         PREC.filter,
-        seq(field('value', $._expression), field('filters', $.filter_chain)),
+        seq(
+          field('value', $._postfix_expression),
+          field('filters', $.filter_chain),
+        ),
       ),
 
     filter_chain: $ => prec.left(PREC.filter, seq('|', sepBy1($.filter, '|'))),
@@ -236,19 +239,22 @@ module.exports = grammar({
 
     arguments: $ => seq('(', optional(sepBy1($._expression, ',')), ')'),
 
+    _postfix_expression: $ =>
+      prec.left(
+        PREC.function_calls,
+        choice(
+          $.call_expression,
+          $.field_access_expression,
+          $._atom_expression,
+        ),
+      ),
+
     call_expression: $ =>
-      prec(
+      prec.left(
         PREC.function_calls,
         seq(
-          field(
-            'function',
-            choice(
-              $.identifier,
-              $.path_expression,
-              $.field_access_expression,
-            ),
-          ),
-          field('arguments', $.arguments),
+          choice($.identifier, $.path_expression, $.field_access_expression),
+          $.arguments,
         ),
       ),
 
@@ -256,26 +262,32 @@ module.exports = grammar({
       prec.left(
         PREC.function_calls,
         seq(
-          field(
-            'object',
-            choice(
-              $.identifier,
-              $.field_access_expression,
-              $.call_expression,
-              $.parenthesized_expression,
-            ),
+          choice(
+            $.identifier,
+            $.path_expression,
+            $.call_expression,
+            $.field_access_expression,
           ),
           '.',
-          field('field', choice($.identifier, $.number_literal)),
+          choice($.identifier, $.number_literal),
         ),
+      ),
+
+    _atom_expression: $ =>
+      choice(
+        $.path_expression,
+        $.parenthesized_expression,
+        $.tuple_expression,
+        $.unit_expression,
+        $.array_expression,
+        $._primary_expression,
       ),
 
     path_expression: $ => seq($.identifier, repeat1(seq('::', $.identifier))),
 
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
-    tuple_pattern: $ =>
-      seq('(', sepBy1($.identifier, ','), optional(','), ')'),
+    tuple_pattern: $ => seq('(', sepBy1($.identifier, ','), optional(','), ')'),
 
     tuple_expression: $ =>
       seq(
@@ -300,17 +312,13 @@ module.exports = grammar({
         $.string_literal,
       ),
 
-    number_literal: _ => /\d+(\.\d+)?/,
+    identifier: _ => token(/[a-zA-Z_][a-zA-Z0-9_]*!?/),
+
+    number_literal: _ => token(/\d+(\.\d+)?/),
 
     boolean_literal: _ => choice('true', 'false'),
 
-    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*!?/,
-
-    string_literal: _ =>
-      choice(
-        seq('"', repeat(/[^"\\]|\\./), '"'),
-        seq("'", repeat(/[^'\\]|\\./), "'"),
-      ),
+    string_literal: _ => token(/"([^"\\]|\\.)*"/),
   },
 })
 

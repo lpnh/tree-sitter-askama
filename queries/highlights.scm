@@ -108,14 +108,14 @@
 
 ; Function calls
 (call_expression
-  function: (identifier) @function.call)
+  (identifier) @function.call)
 
 (call_expression
-  function: (path_expression) @function.call)
+  (path_expression) @function.call)
 
 (call_expression
-  function: (field_access_expression
-    field: (identifier) @function.call))
+  (field_access_expression
+    (identifier) @function.call))
 
 ; Macro calls
 (macro_call_statement
@@ -153,8 +153,8 @@
 
 ; Field access
 (field_access_expression
-  object: (identifier) @variable
-  field: (identifier) @property)
+  (identifier) @variable
+  (identifier) @property)
 
 ; Include and import paths
 (extends_statement
