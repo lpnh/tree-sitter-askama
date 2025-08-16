@@ -27,32 +27,26 @@ module.exports = grammar({
 
   rules: {
     source: $ =>
-      repeat(
-        choice(
-          $.statement_block,
-          $.expression_block,
-          $.comment_block,
-          $.content,
-        ),
-      ),
+      repeat(choice($.control_tag, $.render_expression, $.comment, $.content)),
 
     content: _ => token(prec(0, /[^{]+/)),
 
-    statement_block: $ =>
+    comment: $ => seq('{#', repeat(choice($.comment, /[^#]+/, /#[^}]/)), '#}'),
+
+    control_tag: $ =>
       seq(
         choice('{%', '{%-', '{%+', '{%~'),
         $._statement,
         choice('%}', '-%}', '+%}', '~%}'),
       ),
 
-    expression_block: $ =>
+    render_expression: $ =>
       seq(
         choice('{{', '{{-', '{{+', '{{~'),
         $._expression,
         choice('}}', '-}}', '+}}', '~}}'),
       ),
 
-    // tags (?)
     _statement: $ =>
       choice(
         $.block_statement,
@@ -297,9 +291,6 @@ module.exports = grammar({
         seq('"', repeat(/[^"\\]|\\./), '"'),
         seq("'", repeat(/[^'\\]|\\./), "'"),
       ),
-
-    comment_block: $ =>
-      seq('{#', repeat(choice($.comment_block, /[^#]+/, /#[^}]/)), '#}'),
   },
 })
 
