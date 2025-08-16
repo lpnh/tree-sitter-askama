@@ -23,7 +23,7 @@
 
 (boolean_literal) @boolean
 
-(comment_block) @comment @spell
+(comment) @comment @spell
 
 [
   ","
