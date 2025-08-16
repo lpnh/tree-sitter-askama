@@ -6,7 +6,13 @@ attr
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content))
 
 ================================================================================
 base
@@ -19,7 +25,24 @@ Copyright 2017
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content))
 
 ================================================================================
 big-table
@@ -33,7 +56,31 @@ big-table
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (filter_expression
+      (identifier)
+      (filter_chain
+        (filter
+          (identifier)))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
 
 ================================================================================
 block_in_include_base
@@ -47,7 +94,19 @@ block_in_include_base
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (include_statement
+      (string_literal)))
+  (content))
 
 ================================================================================
 blocks
@@ -67,7 +126,36 @@ Section: {{ s1 }}
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content))
 
 ================================================================================
 child
@@ -78,64 +166,23 @@ child
 
 --------------------------------------------------------------------------------
 
-
-
-================================================================================
-compare
-================================================================================
-
-{% if a == b -%}
-  t
-{%- endif -%}
-{% if a == c -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-{% if a != c -%}
-  t
-{%- endif %}
-{%- if a != b -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-{% if c >= b -%}
-  t
-{%- endif -%}
-{% if b >= c -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-{% if c > b -%}
-  t
-{%- endif -%}
-{% if a > c -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-{% if a <= b -%}
-  t
-{%- endif -%}
-{% if c <= b -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-{% if a < c -%}
-  t
-{%- endif %}
-{%- if a < b -%}
-  t
-{%- else -%}
-  f
-{%- endif %}
-
---------------------------------------------------------------------------------
-
-
+(source
+  (content)
+  (control_tag
+    (extends_statement
+      (string_literal)))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endblock_statement
+      (identifier)))
+  (content))
 
 ================================================================================
 deep-base
@@ -158,7 +205,41 @@ deep-base
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (import_statement
+      (string_literal)
+      (identifier)))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (path_expression
+          (identifier)
+          (identifier))
+        (arguments
+          (string_literal)))))
+  (control_tag
+    (endcall_statement))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content))
 
 ================================================================================
 else
@@ -168,7 +249,18 @@ else
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (conditional_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content))
 
 ================================================================================
 else-if
@@ -178,7 +270,22 @@ else-if
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (conditional_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (conditional_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content))
 
 ================================================================================
 extend_and_import
@@ -190,7 +297,19 @@ extend_and_import
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (import_statement
+      (string_literal)
+      (identifier)))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (control_tag
+    (endblock_statement))
+  (content))
 
 ================================================================================
 filters
@@ -200,7 +319,15 @@ filters
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (render_expression
+    (filter_expression
+      (identifier)
+      (filter_chain
+        (filter
+          (identifier)))))
+  (content))
 
 ================================================================================
 filters_join
@@ -210,7 +337,17 @@ filters_join
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (render_expression
+    (filter_expression
+      (identifier)
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (string_literal))))))
+  (content))
 
 ================================================================================
 for
@@ -225,7 +362,61 @@ for
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+     (identifier)
+     (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (conditional_statement
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content)
+  (control_tag
+    (for_statement
+      (tuple_pattern
+        (identifier)
+        (identifier))
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (conditional_statement
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
 
 ================================================================================
 format
@@ -235,67 +426,17 @@ format
 
 --------------------------------------------------------------------------------
 
-
-
-================================================================================
-if-coerce
-================================================================================
-
-{% macro foo(b) -%}
-    {% if b %}t{% else %}f{% endif -%}
-{% endmacro -%}
-
-{% macro bar(b) -%}
-    {%- call foo(b) -%}{%- endcall -%}
-{% endmacro -%}
-
-{% macro baz(b) -%}
-    {%- call bar(b) -%}{%- endcall -%}
-{% endmacro -%}
-
-{% macro qux(b) -%}
-    {%- call baz(b) -%}{%- endcall -%}
-{% endmacro -%}
-
-{%- call foo(false) -%}{%- endcall -%}
-{%- call bar(true) -%}{%- endcall -%}
-{%- call baz(false) -%}{%- endcall -%}
-{%- call qux(true) -%}{%- endcall -%}
-
-{%- call qux(true && false) -%}{%- endcall -%}
-{%- call qux(false || true) -%}{%- endcall -%}
-
-{%- call qux(self.t) -%}{%- endcall -%}
-{%- call qux(self.f) -%}{%- endcall -%}
-{%- call qux(self.f || self.t) -%}{%- endcall -%}
-
-{%- if false -%}
-if
-{%- else if false || true -%}
-elseif
-{%- else -%}
-else
-{%- endif -%}
-
-{%- if true && false -%}
-if
-{%- else if false -%}
-elseif
-{%- else -%}
-else
-{%- endif -%}
-
-{%- if false || true -%}
-if
-{%- else if (true && false) -%}
-elseif
-{%- else -%}
-else
-{%- endif -%}
-
---------------------------------------------------------------------------------
-
-
+(source
+  (content)
+  (render_expression
+    (filter_expression
+      (string_literal)
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (identifier))))))
+  (content))
 
 ================================================================================
 if
@@ -305,7 +446,15 @@ if
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (conditional_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content))
 
 ================================================================================
 let
@@ -316,7 +465,26 @@ let
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (let_statement
+      (identifier)
+      (identifier)))
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (identifier)
+        (identifier))
+      (identifier)))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (content))
 
 ================================================================================
 macro
@@ -350,7 +518,58 @@ macro
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (macro_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (content)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier)))))
+  (control_tag
+    (endcall_statement))
+  (content)
+  (control_tag
+    (macro_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endmacro_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier)))))
+  (control_tag
+    (endcall_statement))
+  (content))
 
 ================================================================================
 macro-import-callexpr
@@ -364,7 +583,27 @@ macro-import-callexpr
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (import_statement
+      (string_literal)
+      (identifier)))
+  (content)
+  (control_tag
+    (macro_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (content))
 
 ================================================================================
 match-literal-num
@@ -379,7 +618,26 @@ Else found {{item}}
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (when_statement
+      (pattern
+        (number_literal))))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
 
 ================================================================================
 match-no-ws
@@ -389,7 +647,27 @@ match-no-ws
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (pattern
+        (identifier))
+      (pattern_destructure
+        (destructure_element
+          (identifier)))))
+  (render_expression
+    (identifier))
+  (control_tag
+    (when_statement
+      (pattern
+        (identifier))))
+  (control_tag
+    (endmatch_statement))
+  (content))
 
 ================================================================================
 match-opt
@@ -406,7 +684,39 @@ Not Found
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (when_statement
+      (pattern
+        (identifier))
+      (pattern_destructure
+        (destructure_element
+          (string_literal)))))
+  (content)
+  (control_tag
+    (when_statement
+      (pattern
+        (identifier))
+      (pattern_destructure
+        (destructure_element
+          (identifier)))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (when_statement
+      (pattern
+        (identifier))))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
 
 ================================================================================
 option
@@ -420,7 +730,29 @@ option
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (control_tag
+    (conditional_statement
+      (call_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (arguments))))
+  (content)
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content))
 
 ================================================================================
 rust-macros-full-path
@@ -430,7 +762,15 @@ Hello, {{ foo::hello2!() }}!
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content))
 
 ================================================================================
 simple
@@ -444,7 +784,19 @@ in vars too: {{ i18n }}
 
 --------------------------------------------------------------------------------
 
-
+(source
+  (content)
+  (comment)
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content))
 
 ================================================================================
 teams
@@ -468,6 +820,43 @@ teams
 
 --------------------------------------------------------------------------------
 
+(source
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (conditional_statement
+      (binary_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (number_literal))))
+  (content)
+  (control_tag
+    (conditional_statement))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
 
 
 ================================================================================
@@ -478,5 +867,14 @@ tuple-attr
 
 --------------------------------------------------------------------------------
 
-
-
+(source
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (content))
