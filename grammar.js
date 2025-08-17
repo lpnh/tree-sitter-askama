@@ -29,16 +29,13 @@ module.exports = grammar({
 
   externals: $ => [$._nested_comment_token],
 
-  conflicts: $ => [[$.pattern, $._primary_expression]],
-
   rules: {
     source: $ =>
       repeat(choice($.control_tag, $.render_expression, $.comment, $.content)),
 
-    content: _ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
+    content: $ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
 
     comment: $ => seq('{#', $._nested_comment, '#}'),
-
     _nested_comment: $ => $._nested_comment_token,
 
     control_tag: $ =>
@@ -62,75 +59,133 @@ module.exports = grammar({
         $.filter_statement,
         $.endfilter_statement,
         $.extends_statement,
+        $.include_statement,
+        $.import_statement,
         $.let_statement,
         $.for_statement,
         $.endfor_statement,
-        $.conditional_statement,
+        $._conditional_statement,
         $.match_statement,
         $.endmatch_statement,
         $.when_statement,
         $.endwhen_statement,
-        $.include_statement,
         $.macro_statement,
         $.endmacro_statement,
         $.macro_call_statement,
         $.endcall_statement,
-        $.import_statement,
       ),
 
-    block_statement: $ => seq('block', $.identifier),
+    block_statement: $ => seq('block', field('name', $.identifier)),
 
-    endblock_statement: $ => seq('endblock', optional($.identifier)),
+    endblock_statement: $ =>
+      seq('endblock', optional(field('name', $.identifier))),
 
-    filter_statement: $ => seq('filter', $.filter_chain),
+    filter_statement: $ =>
+      seq('filter', field('filters', sepBy1($.filter, '|'))),
 
     endfilter_statement: _ => 'endfilter',
 
-    extends_statement: $ => seq('extends', $.string_literal),
+    extends_statement: $ => seq('extends', field('template', $.string_literal)),
+
+    include_statement: $ => seq('include', field('template', $.string_literal)),
+
+    import_statement: $ =>
+      seq(
+        'import',
+        field('template', $.string_literal),
+        'as',
+        field('name', $.identifier),
+      ),
 
     let_statement: $ =>
       seq(
         choice('let', 'set'),
-        choice($.identifier, $.tuple_pattern),
-        optional(seq('=', $._expression)),
+        optional('mut'),
+        field('pattern', choice($.identifier, $.tuple_pattern)),
+        optional(seq('=', field('value', $._expression))),
       ),
 
     for_statement: $ =>
-      seq('for', choice($.identifier, $.tuple_pattern), 'in', $._expression),
+      seq(
+        'for',
+        field('pattern', choice($.identifier, $.tuple_pattern)),
+        'in',
+        field('value', $._expression),
+      ),
 
     endfor_statement: _ => 'endfor',
 
-    conditional_statement: $ =>
+    _conditional_statement: $ =>
       choice(
-        seq('if', $._expression),
-        seq('if', 'let', $._expression),
-        seq(choice('else if', 'elif'), $._expression),
-        'else',
-        'endif',
+        $.if_statement,
+        $.else_if_statement,
+        $.else_statement,
+        $.endif_statement,
       ),
 
-    match_statement: $ => seq('match', $._expression),
+    if_statement: $ =>
+      seq('if', field('condition', choice($._expression, $.let_condition))),
+
+    let_condition: $ =>
+      seq(
+        'let',
+        field('pattern', $._pattern),
+        '=',
+        field('value', $._expression),
+      ),
+
+    else_if_statement: $ =>
+      seq(choice('else if', 'elif'), field('condition', $._expression)),
+
+    else_statement: _ => 'else',
+
+    endif_statement: _ => 'endif',
+
+    match_statement: $ => seq('match', field('value', $._expression)),
 
     endmatch_statement: _ => 'endmatch',
 
-    when_statement: $ =>
-      seq(
-        'when',
-        field('pattern', $.pattern),
-        optional(seq('with', field('destructure', $.pattern_destructure))),
-      ),
+    when_statement: $ => seq('when', field('pattern', $._match_pattern)),
+
+    _match_pattern: $ => choice($._pattern, $.or_pattern, $.with_pattern),
 
     endwhen_statement: _ => 'endwhen',
 
-    pattern: $ => choice($._primary_expression, $.identifier, '_'),
-
-    pattern_destructure: $ =>
+    _pattern: $ =>
       choice(
-        seq('(', sepBy1($.destructure_element, ','), ')'),
-        seq('[', sepBy1($.destructure_element, ','), ']'),
+        '_',
+        $._identifier_pattern,
+        $._literal_pattern,
+        $.tuple_struct_pattern,
+        $.array_pattern,
+        $.tuple_pattern_match,
       ),
 
-    destructure_element: $ =>
+    _identifier_pattern: $ => $.identifier,
+
+    _literal_pattern: $ =>
+      choice($.string_literal, $.number_literal, $.boolean_literal),
+
+    tuple_struct_pattern: $ =>
+      seq(field('type', $.identifier), '(', optional(_list($._pattern)), ')'),
+
+    array_pattern: $ =>
+      seq('[', optional(_list(choice($._pattern, '..'))), ']'),
+
+    tuple_pattern_match: $ =>
+      seq('(', optional(_list(choice($._pattern, '..'))), ')'),
+
+    or_pattern: $ => seq($._pattern, '|', sepBy1($._pattern, '|')),
+
+    with_pattern: $ => seq($._pattern, 'with', $._pattern_destructure),
+
+    _pattern_destructure: $ =>
+      choice(
+        seq('(', sepBy1($._destructure_element, ','), ')'),
+        seq('[', sepBy1($._destructure_element, ','), ']'),
+      ),
+
+    _destructure_element: $ =>
       choice(
         $.identifier,
         $.string_literal,
@@ -139,18 +194,17 @@ module.exports = grammar({
         '_',
       ),
 
-    include_statement: $ => seq('include', $.string_literal),
-
     macro_statement: $ =>
       seq(
         'macro',
-        $.identifier,
+        field('name', $.identifier),
         '(',
-        optional(sepBy1(choice($.named_argument, $.identifier), ',')),
+        optional(_list(choice($.named_argument, $.identifier))),
         ')',
       ),
 
-    endmacro_statement: $ => seq('endmacro', optional($.identifier)),
+    endmacro_statement: $ =>
+      seq('endmacro', optional(field('name', $.identifier))),
 
     macro_call_statement: $ =>
       prec(
@@ -158,13 +212,11 @@ module.exports = grammar({
         seq(
           'call',
           optional(seq('(', sepBy1($.identifier, ','), ')')),
-          $.call_expression,
+          field('call', $.call_expression),
         ),
       ),
 
     endcall_statement: _ => 'endcall',
-
-    import_statement: $ => seq('import', $.string_literal, 'as', $.identifier),
 
     _expression: $ =>
       choice(
@@ -203,7 +255,11 @@ module.exports = grammar({
     },
 
     is_defined_expression: $ =>
-      seq($._postfix_expression, choice('is', 'is not'), 'defined'),
+      seq(
+        field('expression', $._postfix_expression),
+        field('operator', choice('is', 'is not')),
+        'defined',
+      ),
 
     filter_expression: $ =>
       prec.left(
@@ -223,21 +279,7 @@ module.exports = grammar({
       ),
 
     filter_arguments: $ =>
-      seq(
-        '(',
-        optional(
-          seq(
-            sepBy1(choice($.named_argument, $._expression), ','),
-            optional(','),
-          ),
-        ),
-        ')',
-      ),
-
-    named_argument: $ =>
-      seq(field('name', $.identifier), '=', field('value', $._expression)),
-
-    arguments: $ => seq('(', optional(sepBy1($._expression, ',')), ')'),
+      seq('(', optional(_list(choice($.named_argument, $._expression))), ')'),
 
     _postfix_expression: $ =>
       prec.left(
@@ -253,8 +295,11 @@ module.exports = grammar({
       prec.left(
         PREC.function_calls,
         seq(
-          choice($.identifier, $.path_expression, $.field_access_expression),
-          $.arguments,
+          field(
+            'function',
+            choice($.identifier, $.path_expression, $.field_access_expression),
+          ),
+          field('arguments', $.arguments),
         ),
       ),
 
@@ -262,16 +307,25 @@ module.exports = grammar({
       prec.left(
         PREC.function_calls,
         seq(
-          choice(
-            $.identifier,
-            $.path_expression,
-            $.call_expression,
-            $.field_access_expression,
+          field(
+            'object',
+            choice(
+              $.identifier,
+              $.path_expression,
+              $.call_expression,
+              $.field_access_expression,
+              $.array_expression,
+            ),
           ),
           '.',
-          choice($.identifier, $.number_literal),
+          field('field', choice($.identifier, $.number_literal)),
         ),
       ),
+
+    arguments: $ => seq('(', optional(_list($._expression)), ')'),
+
+    named_argument: $ =>
+      seq(field('name', $.identifier), '=', field('value', $._expression)),
 
     _atom_expression: $ =>
       choice(
@@ -283,7 +337,11 @@ module.exports = grammar({
         $._primary_expression,
       ),
 
-    path_expression: $ => seq($.identifier, repeat1(seq('::', $.identifier))),
+    path_expression: $ =>
+      seq(
+        field('path', $.identifier),
+        repeat1(seq('::', field('name', $.identifier))),
+      ),
 
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
@@ -292,9 +350,9 @@ module.exports = grammar({
     tuple_expression: $ =>
       seq(
         '(',
-        $._expression,
+        field('first', $._expression),
         ',',
-        optional(sepBy1($._expression, ',')),
+        optional(field('rest', sepBy1($._expression, ','))),
         optional(','),
         ')',
       ),
@@ -302,7 +360,7 @@ module.exports = grammar({
     unit_expression: _ => seq('(', ')'),
 
     array_expression: $ =>
-      seq('[', optional(seq(sepBy1($._expression, ','), optional(','))), ']'),
+      seq('[', optional(field('elements', _list($._expression))), ']'),
 
     _primary_expression: $ =>
       choice(
@@ -314,7 +372,7 @@ module.exports = grammar({
 
     identifier: _ => token(/[a-zA-Z_][a-zA-Z0-9_]*!?/),
 
-    number_literal: _ => token(/\d+(\.\d+)?/),
+    number_literal: _ => token(/\d+(\.\d+)?([eE][+-]?\d+)?/),
 
     boolean_literal: _ => choice('true', 'false'),
 
@@ -322,6 +380,19 @@ module.exports = grammar({
   },
 })
 
+/**
+ * Match one or more occurrences separated by a delimiter
+ * @param {RuleOrLiteral} rule - The rule to repeat
+ * @param {RuleOrLiteral} separator - The separator
+ */
 function sepBy1(rule, separator) {
   return seq(rule, repeat(seq(separator, rule)))
+}
+
+/**
+ * Match a comma-separated list with optional trailing comma
+ * @param {RuleOrLiteral} rule - The rule for list items
+ */
+function _list(rule) {
+  return seq(sepBy1(rule, ','), optional(','))
 }

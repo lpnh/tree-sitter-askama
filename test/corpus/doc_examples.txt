@@ -1,0 +1,823 @@
+================================================================================
+constants
+================================================================================
+
+<p>The user limit is {{ crate::MAX_NB_USERS }}.</p>
+{% set value = 4 %}
+{% if value > crate::MAX_NB_USERS %}
+    <p>{{ value }} is bigger than MAX_NB_USERS.</p>
+{% else %}
+    <p>{{ value }} is less than MAX_NB_USERS.</p>
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+  (source
+  (content)
+  (render_expression
+    (path_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (identifier)
+        (path_expression
+          (identifier)
+          (identifier)))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+assignments_1
+================================================================================
+
+{% let name = user.name %}
+{% let len = name.len() %}
+
+{% let val -%}
+{% if len == 0 -%}
+  {% let val = "foo" -%}
+{% else -%}
+  {% let val = name -%}
+{% endif -%}
+{{ val }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (control_tag
+    (let_statement
+      (identifier)
+      (call_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (arguments))))
+  (control_tag
+    (let_statement
+      (identifier)))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (identifier)
+        (number_literal))))
+  (control_tag
+    (let_statement
+      (identifier)
+      (string_literal)))
+  (control_tag
+    (else_statement))
+  (control_tag
+    (let_statement
+      (identifier)
+      (identifier)))
+  (control_tag
+    (endif_statement))
+  (render_expression
+    (identifier))
+  (content))
+
+================================================================================
+assignments_2
+================================================================================
+
+{% let foo = "bar" %}
+{{ foo }}
+
+{% let foo = "baz" %}
+{{ foo }}
+
+================================================================================
+assignments_3
+================================================================================
+
+{# In this example, `foo` is an iterator. If you want to be able to iterate it,
+you need it to be mutable #}
+{% let mut foo = [1, 2].iter() %}
+{{ foo.next().unwrap() }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (control_tag
+    (let_statement
+      (identifier)
+      (call_expression
+        (field_access_expression
+          (array_expression
+            (number_literal)
+            (number_literal))
+          (identifier))
+        (arguments))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (call_expression
+          (field_access_expression
+            (identifier)
+            (identifier))
+          (arguments))
+        (identifier))
+      (arguments)))
+  (content))
+
+================================================================================
+filter_blocks_1
+================================================================================
+
+{% filter lower %}
+    {{ t }} / HELLO / {{ u }}
+{% endfilter %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (filter_statement
+      (filter
+        (identifier))))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endfilter_statement))
+  (content))
+
+================================================================================
+filter_blocks_2
+================================================================================
+
+{% filter lower|capitalize %}
+    {{ t }} / HELLO / {{ u }}
+{% endfilter %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (filter_statement
+      (filter
+        (identifier))
+      (filter
+        (identifier))))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endfilter_statement))
+  (content))
+
+================================================================================
+for_1
+================================================================================
+
+<h1>Users</h1>
+<ul>
+{% for user in users %}
+  <li>{{ user.name|e }}</li>
+{% endfor %}
+</ul>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (filter_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (filter_chain
+        (filter
+          (identifier)))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
+
+================================================================================
+for_2
+================================================================================
+
+<h1>Users</h1>
+<ul>
+{% for user in users %}
+   {% if loop.first %}
+   <li>First: {{user.name}}</li>
+   {% else %}
+   <li>User#{{loop.index}}: {{user.name}}</li>
+   {% endif %}
+{% endfor %}
+</ul>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (control_tag
+    (if_statement
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (endfor_statement))
+  (content))
+
+================================================================================
+if
+================================================================================
+
+{% if users.len() == 0 %}
+  No users
+{% else if users.len() == 1 %}
+  1 user
+{% elif users.len() == 2 %}
+  2 users
+{% else %}
+  {{ users.len() }} users
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (binary_expression
+        (call_expression
+          (field_access_expression
+            (identifier)
+            (identifier))
+          (arguments))
+        (number_literal))))
+  (content)
+  (control_tag
+    (else_if_statement
+      (binary_expression
+        (call_expression
+          (field_access_expression
+            (identifier)
+            (identifier))
+          (arguments))
+        (number_literal))))
+  (content)
+  (control_tag
+    (else_if_statement
+      (binary_expression
+        (call_expression
+          (field_access_expression
+            (identifier)
+            (identifier))
+          (arguments))
+        (number_literal))))
+  (content)
+  (control_tag
+    (else_statement))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+if_let
+================================================================================
+
+{% if let Some(user) = user %}
+  {{ user.name }}
+{% else %}
+  No user
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (let_condition
+        (tuple_struct_pattern
+          (identifier)
+          (identifier))
+        (identifier))))
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+if_not_defined_1
+================================================================================
+
+{% if x is defined %}
+  x is defined!
+{% endif %}
+{% if y is not defined %}
+  y is not defined
+{% else %}
+  y is defined
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (is_defined_expression
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (is_defined_expression
+        (identifier))))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+if_not_defined_2
+================================================================================
+
+{% filter lower|capitalize %}
+    {{ t }} / HELLO / {{ u }}
+{% endfilter %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (filter_statement
+      (filter
+        (identifier))
+      (filter
+        (identifier))))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endfilter_statement))
+  (content))
+
+================================================================================
+if_not_defined_3
+================================================================================
+
+{% filter lower|capitalize %}
+    {{ t }} / HELLO / {{ u }}
+{% endfilter %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (filter_statement
+      (filter
+        (identifier))
+      (filter
+        (identifier))))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endfilter_statement))
+  (content))
+
+================================================================================
+match_1
+================================================================================
+
+{% match item %}
+  {% when Some with ("foo") %}
+    Found literal foo
+  {% when Some with (val) %}
+    Found {{ val }}
+  {% when None %}
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (with_pattern
+        (identifier)
+        (string_literal))))
+  (content)
+  (control_tag
+    (when_statement
+      (with_pattern
+        (identifier)
+        (identifier))))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (when_statement
+      (identifier)))
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_2
+================================================================================
+
+{% match multiple_choice_answer %}
+  {% when 3 %} Correct!
+  {% else %} Sorry, the right answer is "3".
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (number_literal)))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_3
+================================================================================
+
+{% match result %}
+  {% when Ok(val) %} Good: {{ val }}.
+  {% when Err(err) %} Bad: {{ err }}.
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (tuple_struct_pattern
+        (identifier)
+        (identifier))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (when_statement
+      (tuple_struct_pattern
+        (identifier)
+        (identifier))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_4
+================================================================================
+
+{% match list_of_ints %}
+  {% when [first, ..] %} The list starts with a {{ first }}
+  {% when _ %} The list is empty.
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (array_pattern
+        (identifier))))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (when_statement))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_5
+================================================================================
+
+{% match answer %}
+  {% when Ok(42) %} The answer is "42".
+  {% else %} No answer wrong answer?
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (tuple_struct_pattern
+        (identifier)
+        (number_literal))))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_6
+================================================================================
+
+{% match number %}
+  {% when 1 | 4 | 86 %} Some numbers
+  {% when n %} Number is {{ n }}
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (or_pattern
+        (number_literal)
+        (number_literal)
+        (number_literal))))
+  (content)
+  (control_tag
+    (when_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+match_7
+================================================================================
+
+{% match number %}
+  {% when 0 | 2 | 4 | 6 | 8 %}
+    even
+  {% endwhen %}
+  {% when 1 | 3 | 5 | 7 | 9 %}
+    odd
+  {% endwhen %}
+  {% else %}
+    unknown
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (or_pattern
+        (number_literal)
+        (number_literal)
+        (number_literal)
+        (number_literal)
+        (number_literal))))
+  (content)
+  (control_tag
+    (endwhen_statement))
+  (control_tag
+    (when_statement
+      (or_pattern
+        (number_literal)
+        (number_literal)
+        (number_literal)
+        (number_literal)
+        (number_literal))))
+  (content)
+  (control_tag
+    (endwhen_statement))
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
+whitespace_1
+================================================================================
+
+{% if foo %}
+  {{- bar -}}
+{% else -%}
+  nothing
+{%- endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (identifier)))
+  (render_expression
+    (identifier))
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+whitespace_2
+================================================================================
+
+<a href="/" {#+ #}
+   class="something">text</a>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (comment)
+  (content))
+
+================================================================================
+whitespace_3
+================================================================================
+
+{% if something ~%}
+Hello
+{%~ endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+calling_functions_1
+================================================================================
+
+{# This is the equivalent of `self.method()`. #}
+{{ method() }}
+{# This is the equivalent of `self::function()`, which will call the
+`function` function from the current module. #}
+{{ self::function() }}
+{# This is the equivalent of `super::b::f()`. #}
+{{ super::b::f() }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (comment)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (comment)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content))
+
+================================================================================
+comment_1
+================================================================================
+
+{# A Comment #}
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (content))
+
+================================================================================
+comment_2
+================================================================================
+
+{#
+A Comment
+{# A nested comment #}
+#}
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (content))

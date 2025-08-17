@@ -235,14 +235,14 @@ else
 
 (source
   (control_tag
-    (conditional_statement
+    (if_statement
       (identifier)))
   (content)
   (control_tag
-    (conditional_statement))
+    (else_statement))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (content))
 
 ================================================================================
@@ -255,18 +255,18 @@ else-if
 
 (source
   (control_tag
-    (conditional_statement
+    (if_statement
       (identifier)))
   (content)
   (control_tag
-    (conditional_statement
+    (else_if_statement
       (identifier)))
   (content)
   (control_tag
-    (conditional_statement))
+    (else_statement))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (content))
 
 ================================================================================
@@ -353,13 +353,13 @@ for
   (render_expression
     (identifier))
   (control_tag
-    (conditional_statement
+    (if_statement
       (field_access_expression
         (identifier)
         (identifier))))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (control_tag
     (endfor_statement))
   (control_tag
@@ -379,13 +379,13 @@ for
   (render_expression
     (identifier))
   (control_tag
-    (conditional_statement
+    (if_statement
       (field_access_expression
         (identifier)
         (identifier))))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (control_tag
     (endfor_statement))
   (content))
@@ -419,11 +419,11 @@ if
 
 (source
   (control_tag
-    (conditional_statement
+    (if_statement
       (identifier)))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (content))
 
 ================================================================================
@@ -581,11 +581,10 @@ Else found {{item}}
       (identifier)))
   (control_tag
     (when_statement
-      (pattern
-        (number_literal))))
+      (number_literal)))
   (content)
   (control_tag
-    (conditional_statement))
+    (else_statement))
   (content)
   (render_expression
     (identifier))
@@ -607,17 +606,14 @@ match-no-ws
       (identifier)))
   (control_tag
     (when_statement
-      (pattern
-        (identifier))
-      (pattern_destructure
-        (destructure_element
-          (identifier)))))
+      (with_pattern
+        (identifier)
+        (identifier))))
   (render_expression
     (identifier))
   (control_tag
     (when_statement
-      (pattern
-        (identifier))))
+      (identifier)))
   (control_tag
     (endmatch_statement))
   (content))
@@ -643,26 +639,21 @@ Not Found
       (identifier)))
   (control_tag
     (when_statement
-      (pattern
-        (identifier))
-      (pattern_destructure
-        (destructure_element
-          (string_literal)))))
+      (with_pattern
+        (identifier)
+        (string_literal))))
   (content)
   (control_tag
     (when_statement
-      (pattern
-        (identifier))
-      (pattern_destructure
-        (destructure_element
-          (identifier)))))
+      (with_pattern
+        (identifier)
+        (identifier))))
   (content)
   (render_expression
     (identifier))
   (control_tag
     (when_statement
-      (pattern
-        (identifier))))
+      (identifier)))
   (content)
   (control_tag
     (endmatch_statement))
@@ -682,7 +673,7 @@ option
 
 (source
   (control_tag
-    (conditional_statement
+    (if_statement
       (call_expression
         (field_access_expression
           (identifier)
@@ -696,10 +687,10 @@ option
         (identifier))
       (arguments)))
   (control_tag
-    (conditional_statement))
+    (else_statement))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (content))
 
 ================================================================================
@@ -781,7 +772,7 @@ teams
       (identifier)))
   (content)
   (control_tag
-    (conditional_statement
+    (if_statement
       (binary_expression
         (field_access_expression
           (identifier)
@@ -789,7 +780,7 @@ teams
         (number_literal))))
   (content)
   (control_tag
-    (conditional_statement))
+    (endif_statement))
   (content)
   (render_expression
     (field_access_expression
