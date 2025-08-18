@@ -21,12 +21,6 @@
   name: (identifier) @type
   (#lua-match? @type "^[A-Z]"))
 
-((identifier) @constant.builtin
-  (#any-of? @constant.builtin "Some" "None" "Ok" "Err"))
-
-((identifier) @module
-  (#any-of? @module "crate" "super" "self"))
-
 ; Literals
 (string_literal) @string
 
@@ -174,6 +168,12 @@
 (call_expression
   function: (identifier) @constant.builtin
   (#any-of? @constant.builtin "caller"))
+
+((identifier) @constant.builtin
+  (#any-of? @constant.builtin "Some" "None" "Ok" "Err"))
+
+((identifier) @module
+  (#any-of? @module "crate" "super" "self"))
 
 ; Filter names
 (filter

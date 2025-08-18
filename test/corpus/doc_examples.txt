@@ -150,7 +150,7 @@ filter_blocks_1
 ================================================================================
 
 {% filter lower %}
-    {{ t }} / HELLO / {{ u }}
+  {{ t }} / HELLO / {{ u }}
 {% endfilter %}
 
 --------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ filter_blocks_2
 ================================================================================
 
 {% filter lower|capitalize %}
-    {{ t }} / HELLO / {{ u }}
+  {{ t }} / HELLO / {{ u }}
 {% endfilter %}
 
 --------------------------------------------------------------------------------
@@ -194,6 +194,214 @@ filter_blocks_2
   (control_tag
     (endfilter_statement))
   (content))
+
+================================================================================
+whitespace_1
+================================================================================
+
+{% if foo %}
+  {{- bar -}}
+{% else if another -%}
+  nothing
+{%- endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (identifier)))
+  (render_expression
+    (identifier))
+  (control_tag
+    (else_if_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+whitespace_2
+================================================================================
+
+<a href="/" {#+ #}
+   class="something">text</a>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (comment)
+  (content))
+
+================================================================================
+whitespace_3
+================================================================================
+
+{% if something ~%}
+Hello
+{%~ endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+calling_functions
+================================================================================
+
+{# This is the equivalent of `self.method()`. #}
+{{ method() }}
+{# This is the equivalent of `self::function()`, which will call the
+`function` function from the current module. #}
+{{ self::function() }}
+{# This is the equivalent of `super::b::f()`. #}
+{{ super::b::f() }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (comment)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (comment)
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier)
+        (identifier))
+      (arguments)))
+  (content))
+
+================================================================================
+base_template_1
+================================================================================
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{{ title }} - My Site{% endblock %}</title>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div id="content">
+      {% block content %}<p>Placeholder content</p>{% endblock %}
+    </div>
+  </body>
+</html>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (control_tag
+    (endblock_statement))
+  (content)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (content))
+
+================================================================================
+base_template_2
+================================================================================
+
+{% block content %}<p>Placeholder content</p>{% endblock content %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement
+      (identifier)))
+  (content))
+
+================================================================================
+child_template
+================================================================================
+
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+  <style>
+  </style>
+{% endblock %}
+
+{% block content %}
+  <h1>Index</h1>
+  <p>Hello, world!</p>
+  {{ super() }}
+{% endblock %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (extends_statement
+      (string_literal)))
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement))
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (control_tag
+    (endblock_statement))
+  (content))
+
 
 ================================================================================
 for_1
@@ -411,52 +619,40 @@ if_not_defined_1
 if_not_defined_2
 ================================================================================
 
-{% filter lower|capitalize %}
-    {{ t }} / HELLO / {{ u }}
-{% endfilter %}
+{% if x is defined && x == "12" && y == Some(true) %}
+...
+{% endif %}
+
+<script>
+// It will generate `const x = true;` (or false is `x` is not defined).
+const x = {{ x is defined }};
+</script>
 
 --------------------------------------------------------------------------------
 
 (source
   (control_tag
-    (filter_statement
-      (filter
-        (identifier))
-      (filter
-        (identifier))))
-  (render_expression
-    (identifier))
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (is_defined_expression
+            (identifier))
+          (binary_expression
+            (identifier)
+            (string_literal)))
+        (binary_expression
+          (identifier)
+          (call_expression
+            (identifier)
+            (arguments
+              (boolean_literal)))))))
+  (content)
+  (control_tag
+    (endif_statement))
   (content)
   (render_expression
-    (identifier))
-  (control_tag
-    (endfilter_statement))
-  (content))
-
-================================================================================
-if_not_defined_3
-================================================================================
-
-{% filter lower|capitalize %}
-    {{ t }} / HELLO / {{ u }}
-{% endfilter %}
-
---------------------------------------------------------------------------------
-
-(source
-  (control_tag
-    (filter_statement
-      (filter
-        (identifier))
-      (filter
-        (identifier))))
-  (render_expression
-    (identifier))
-  (content)
-  (render_expression
-    (identifier))
-  (control_tag
-    (endfilter_statement))
+    (is_defined_expression
+      (identifier)))
   (content))
 
 ================================================================================
@@ -700,101 +896,6 @@ match_7
   (content)
   (control_tag
     (endmatch_statement))
-  (content))
-
-================================================================================
-whitespace_1
-================================================================================
-
-{% if foo %}
-  {{- bar -}}
-{% else -%}
-  nothing
-{%- endif %}
-
---------------------------------------------------------------------------------
-
-(source
-  (control_tag
-    (if_statement
-      (identifier)))
-  (render_expression
-    (identifier))
-  (control_tag
-    (else_statement))
-  (content)
-  (control_tag
-    (endif_statement))
-  (content))
-
-================================================================================
-whitespace_2
-================================================================================
-
-<a href="/" {#+ #}
-   class="something">text</a>
-
---------------------------------------------------------------------------------
-
-(source
-  (content)
-  (comment)
-  (content))
-
-================================================================================
-whitespace_3
-================================================================================
-
-{% if something ~%}
-Hello
-{%~ endif %}
-
---------------------------------------------------------------------------------
-
-(source
-  (control_tag
-    (if_statement
-      (identifier)))
-  (content)
-  (control_tag
-    (endif_statement))
-  (content))
-
-================================================================================
-calling_functions_1
-================================================================================
-
-{# This is the equivalent of `self.method()`. #}
-{{ method() }}
-{# This is the equivalent of `self::function()`, which will call the
-`function` function from the current module. #}
-{{ self::function() }}
-{# This is the equivalent of `super::b::f()`. #}
-{{ super::b::f() }}
-
---------------------------------------------------------------------------------
-
-(source
-  (comment)
-  (render_expression
-    (call_expression
-      (identifier)
-      (arguments)))
-  (comment)
-  (render_expression
-    (call_expression
-      (path_expression
-        (identifier)
-        (identifier))
-      (arguments)))
-  (comment)
-  (render_expression
-    (call_expression
-      (path_expression
-        (identifier)
-        (identifier)
-        (identifier))
-      (arguments)))
   (content))
 
 ================================================================================
