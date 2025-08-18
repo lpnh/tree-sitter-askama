@@ -7,6 +7,20 @@
 ((identifier) @constant
   (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
 
+(path_expression
+  path: (identifier) @module)
+
+(path_expression
+  name: (identifier) @module)
+
+(path_expression
+  path: (identifier) @type
+  (#lua-match? @type "^[A-Z]"))
+
+(path_expression
+  name: (identifier) @type
+  (#lua-match? @type "^[A-Z]"))
+
 ((identifier) @constant.builtin
   (#any-of? @constant.builtin "Some" "None" "Ok" "Err"))
 
@@ -37,10 +51,13 @@
 ; Operators
 [
   "|"
-  "="
-] @operator
+] @punctuation.bracket
 
 [
+  "!"
+  "="
+  ".."
+  "..="
   "bitor"
   "xor"
   "bitand"
@@ -51,10 +68,10 @@
   "*"
   "/"
   "%"
-  "<="
-  ">="
   "<"
+  "<="
   ">"
+  ">="
   "=="
   "!="
 ] @operator
@@ -161,6 +178,7 @@
 ; Comments
 (comment) @comment @spell
 
-; Wildcards
-"_" @character.special
-".." @character.special
+; Specials
+(placeholder) @character.special
+
+(wildcard) @character.special

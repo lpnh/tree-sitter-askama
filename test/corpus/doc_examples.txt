@@ -579,12 +579,14 @@ match_4
   (control_tag
     (when_statement
       (array_pattern
-        (identifier))))
+        (identifier)
+        (wildcard))))
   (content)
   (render_expression
     (identifier))
   (control_tag
-    (when_statement))
+    (when_statement
+      (placeholder)))
   (content)
   (control_tag
     (endmatch_statement))

@@ -1,4 +1,484 @@
 ================================================================================
+allow-whitespaces
+================================================================================
+
+{{ tuple.0 }}
+{{ tuple .1 }}
+{{ tuple. 2 }}
+{{ tuple . 3 }}
+{% let ( t0 , t1 , t2 , t3 , ) = tuple %}
+
+{{ string }}
+{{ string.len( ) }}
+{{ string . len () }}
+{{ string . len () }}
+{{ string. len () }}
+{{ string . len ( ) }}
+
+{{ nested_1 . nested_2 . array [0] }}
+{{ nested_1 .nested_2. array [ 1 ] }}
+{{ nested_1 .nested_2. hash [ "key" ] }}
+
+{% let array = nested_1.nested_2.array %}
+{#
+{% let array = nested_1.nested_2.array %}
+{% let array = nested_1 . nested_2 . array %}
+#}
+{#
+{% let hash = &nested_1.nested_2.hash %}
+#}
+
+{{ array| json(2) }}
+{{ array[..]| json(2) }}{{ array [ .. ]| json(2) }}
+{{ array[1..2]| json(2) }}{{ array [ 1 .. 2 ]| json(2) }}
+{{ array[1..=2]| json(2) }}{{ array [ 1 ..= 2 ]| json(2) }}
+{{ array[(0+1)..(3-1)]| json(2) }}{{ array [ ( 0 + 1 ) .. ( 3 - 1 ) ]| json(2) }}
+
+{{-1}}{{ -1 }}{{ - 1 }}
+{{1+2}}{{ 1+2 }}{{ 1 +2 }}{{ 1+ 2 }} {{ 1 + 2 }}
+{{1*2}}{{ 1*2 }}{{ 1 *2 }}{{ 1* 2 }} {{ 1 * 2 }}
+{{1 bitand 2}}{{ 1 bitand 2 }}{{ 1 bitand 2 }}{{ 1 bitand 2 }} {{ 1 bitand 2 }}
+{{1 bitor 2}}{{ 1 bitor 2 }}{{ 1 bitor 2}}{{1 bitor 2 }} {{1			bitor			2}}
+
+{{true}}{{false}}
+{{!true}}{{ !true }}{{ ! true }}
+{#
+{{true&&false}}{{ true&&false }}{{ true &&false }}{{ true&& false }} {{ true && false }}
+{{true||false}}{{ true||false }}{{ true ||false }}{{ true|| false }} {{ true || false }}
+#}
+
+{{ self.f0() }}{{ self.f0 () }}{{ self.f0 ( ) }}
+{{ self.f1("1") }}{{ self.f1 ( "1" ) }}{{ self.f1 ( "1" ) }}
+{{ self.f2("1","2") }}{{ self.f2 ( "1" ,"2" ) }}{{ self.f2 ( "1" , "2" ) }}
+
+{% for s in 0..5 %}{% endfor %}
+{% for s in 0 .. 5 %}{% endfor %}
+
+{% match option %}
+{% when Option :: Some with ( option ) %}
+{% when std :: option :: Option :: None %}
+{% endmatch %}
+
+{{ std::string::String::new () }}
+{#
+{{ ::std::string::String::new () }}
+#}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (number_literal)))
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier))
+      (identifier)))
+  (render_expression
+    (identifier))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (index_expression
+      (field_access_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (identifier))
+      (number_literal)))
+  (render_expression
+    (index_expression
+      (field_access_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (identifier))
+      (number_literal)))
+  (render_expression
+    (index_expression
+      (field_access_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (identifier))
+      (string_literal)))
+  (control_tag
+    (let_statement
+      (identifier)
+      (field_access_expression
+        (field_access_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (comment)
+  (comment)
+  (render_expression
+    (filter_expression
+      (identifier)
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (number_literal)
+          (number_literal)))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (number_literal)
+          (number_literal)))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (number_literal)
+          (number_literal)))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (number_literal)
+          (number_literal)))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (parenthesized_expression
+            (binary_expression
+              (number_literal)
+              (number_literal)))
+          (parenthesized_expression
+            (binary_expression
+              (number_literal)
+              (number_literal)))))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (filter_expression
+      (index_expression
+        (identifier)
+        (range_expression
+          (parenthesized_expression
+            (binary_expression
+              (number_literal)
+              (number_literal)))
+          (parenthesized_expression
+            (binary_expression
+              (number_literal)
+              (number_literal)))))
+      (filter_chain
+        (filter
+          (identifier)
+          (filter_arguments
+            (number_literal))))))
+  (render_expression
+    (number_literal))
+  (render_expression
+    (number_literal))
+  (render_expression
+    (number_literal))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (number_literal)))
+  (render_expression
+    (boolean_literal))
+  (render_expression
+    (boolean_literal))
+  (render_expression
+    (unary_expression
+      (boolean_literal)))
+  (render_expression
+    (unary_expression
+      (boolean_literal)))
+  (render_expression
+    (unary_expression
+      (boolean_literal)))
+  (comment)
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal)
+        (string_literal))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal)
+        (string_literal))))
+  (render_expression
+    (call_expression
+      (field_access_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal)
+        (string_literal))))
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (number_literal)
+        (number_literal))))
+  (control_tag
+    (endfor_statement))
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (number_literal)
+        (number_literal))))
+  (control_tag
+    (endfor_statement))
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (with_pattern
+        (path_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (control_tag
+    (when_statement
+      (path_expression
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier))))
+  (control_tag
+    (endmatch_statement))
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier))
+      (arguments)))
+  (comment)
+  (content))
+
+================================================================================
 attr
 ================================================================================
 
@@ -328,6 +808,83 @@ filters_join
   (content))
 
 ================================================================================
+for-range
+================================================================================
+
+{% for s in 0..2 -%}
+    foo{% if loop.first %} (first){% endif %}{% if loop.last %} (last){% endif %}
+{% endfor -%}
+
+{% for s in init..1 -%}
+    bar
+{% endfor -%}
+
+{% for s in 0..end -%}
+    foo
+{% endfor -%}
+
+{% for s in init..end -%}
+    bar
+{% endfor -%}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (number_literal)
+        (number_literal))))
+  (content)
+  (control_tag
+    (if_statement
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (field_access_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (endfor_statement))
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (identifier)
+        (number_literal))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (number_literal)
+        (identifier))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (control_tag
+    (for_statement
+      (identifier)
+      (range_expression
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
+
+================================================================================
 for
 ================================================================================
 
@@ -491,7 +1048,8 @@ macro
   (control_tag
     (macro_statement
       (identifier)
-      (identifier)))
+      (macro_arguments
+        (identifier))))
   (render_expression
     (identifier))
   (render_expression
@@ -513,7 +1071,8 @@ macro
   (control_tag
     (macro_statement
       (identifier)
-      (identifier)))
+      (macro_arguments
+        (identifier))))
   (render_expression
     (identifier))
   (render_expression
@@ -657,6 +1216,61 @@ Not Found
   (content)
   (control_tag
     (endmatch_statement))
+  (content))
+
+================================================================================
+named-end
+================================================================================
+
+{% extends "base.html" %}
+{# Testing named "endmacro" #}
+{% macro foo(b) -%}
+    {% if b %}t{% else %}f{% endif -%}
+{% endmacro foo -%}
+{# Testing named endblock declaration #}
+{% block what %}{% endblock what %}
+{# Testing named endblock call #}
+{% block foo %}tadam{% endblock foo %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (extends_statement
+      (string_literal)))
+  (comment)
+  (control_tag
+    (macro_statement
+      (identifier)
+      (macro_arguments
+        (identifier))))
+  (control_tag
+    (if_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (endmacro_statement
+      (identifier)))
+  (comment)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (control_tag
+    (endblock_statement
+      (identifier)))
+  (comment)
+  (control_tag
+    (block_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endblock_statement
+      (identifier)))
   (content))
 
 ================================================================================
