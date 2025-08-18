@@ -171,6 +171,10 @@
   (path_expression
     name: (identifier) @function))
 
+(call_expression
+  function: (identifier) @constant.builtin
+  (#any-of? @constant.builtin "caller"))
+
 ; Filter names
 (filter
   name: (identifier) @function.builtin)

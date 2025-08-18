@@ -984,6 +984,61 @@ if
   (content))
 
 ================================================================================
+let-destruct-tuple
+================================================================================
+
+{% let (a, ((b, c), (d))) = abcd %}{{a}}{{b}}{{c}}{{d}}
+{% let (a, (_, d)) = abcd %}{{a}}{{d}}
+{% let (((a))) = abcd.0 %}{{a}}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (identifier)
+        (tuple_pattern
+          (tuple_pattern
+            (identifier)
+            (identifier))
+          (tuple_pattern
+            (identifier))))
+      (identifier)))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (identifier)
+        (tuple_pattern
+          (placeholder)
+          (identifier)))
+      (identifier)))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (tuple_pattern
+          (tuple_pattern
+            (identifier))))
+      (field_access_expression
+        (identifier)
+        (number_literal))))
+  (render_expression
+    (identifier))
+  (content))
+
+================================================================================
 let
 ================================================================================
 
@@ -1117,6 +1172,58 @@ macro-import-callexpr
         (identifier)
         (identifier))
       (arguments)))
+  (control_tag
+    (endmacro_statement))
+  (content))
+
+================================================================================
+macro-with-caller
+================================================================================
+
+{%- macro outer() -%}
+    <div>{{caller()}}</div>
+{%- endmacro -%}
+
+{%- macro inner() -%}
+    content
+{%- endmacro -%}
+
+{%- macro intermediate() -%}
+    intermediate
+    {%- call inner() -%}{%- endcall -%}
+{%- endmacro -%}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)))
+  (content)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (control_tag
+    (macro_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (control_tag
+    (macro_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments))))
+  (control_tag
+    (endcall_statement))
   (control_tag
     (endmacro_statement))
   (content))

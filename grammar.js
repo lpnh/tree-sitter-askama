@@ -104,14 +104,14 @@ module.exports = grammar({
       seq(
         choice('let', 'set'),
         optional('mut'),
-        field('pattern', choice($.identifier, $.tuple_pattern)),
+        field('pattern', $._pattern),
         optional(seq('=', field('value', $._expression))),
       ),
 
     for_statement: $ =>
       seq(
         'for',
-        field('pattern', choice($.identifier, $.tuple_pattern)),
+        field('pattern', $._pattern),
         'in',
         field('value', $._expression),
       ),
@@ -160,7 +160,7 @@ module.exports = grammar({
         $._literal_pattern,
         $.tuple_struct_pattern,
         $.array_pattern,
-        $.tuple_pattern_match,
+        $.tuple_pattern,
         $.path_expression,
         $.placeholder,
       ),
@@ -176,7 +176,7 @@ module.exports = grammar({
     array_pattern: $ =>
       seq('[', optional(_list(choice($._pattern, $.wildcard))), ']'),
 
-    tuple_pattern_match: $ =>
+    tuple_pattern: $ =>
       seq('(', optional(_list(choice($._pattern, $.wildcard))), ')'),
 
     or_pattern: $ => seq($._pattern, '|', sepBy1($._pattern, '|')),
@@ -370,8 +370,6 @@ module.exports = grammar({
       ),
 
     parenthesized_expression: $ => seq('(', $._expression, ')'),
-
-    tuple_pattern: $ => seq('(', sepBy1($.identifier, ','), optional(','), ')'),
 
     tuple_expression: $ =>
       seq(
