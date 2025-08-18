@@ -298,6 +298,7 @@ module.exports = grammar({
         $.index_expression,
         $.range_expression,
         $.unary_expression,
+        $.reference_expression,
         $._atom_expression,
       ),
 
@@ -346,7 +347,11 @@ module.exports = grammar({
         ),
       ),
 
-    unary_expression: $ => prec(PREC.unary, seq('!', $._expression)),
+    unary_expression: $ =>
+      prec(PREC.unary, seq(choice('*', '!'), $._expression)),
+
+    reference_expression: $ =>
+      prec(PREC.unary, seq('&', field('value', $._expression))),
 
     arguments: $ => seq('(', optional(_list($._expression)), ')'),
 

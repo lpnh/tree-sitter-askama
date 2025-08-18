@@ -60,6 +60,10 @@
           "named": true
         },
         {
+          "type": "reference_expression",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -144,6 +148,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -279,6 +287,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -427,6 +439,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -673,6 +689,10 @@
             "named": true
           },
           {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -877,6 +897,10 @@
           "named": true
         },
         {
+          "type": "reference_expression",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -970,6 +994,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -1119,6 +1147,10 @@
             "named": true
           },
           {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1204,6 +1236,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -1326,6 +1362,10 @@
         },
         {
           "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "reference_expression",
           "named": true
         },
         {
@@ -1500,6 +1540,10 @@
             "named": true
           },
           {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1623,6 +1667,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -1781,6 +1829,10 @@
             "named": true
           },
           {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1872,6 +1924,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -2002,6 +2058,10 @@
           "named": true
         },
         {
+          "type": "reference_expression",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -2094,6 +2154,94 @@
     }
   },
   {
+    "type": "reference_expression",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": "array_expression",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "field_access_expression",
+            "named": true
+          },
+          {
+            "type": "filter_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "is_defined_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "path_expression",
+            "named": true
+          },
+          {
+            "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "tuple_expression",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "unit_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "render_expression",
     "named": true,
     "fields": {},
@@ -2151,6 +2299,10 @@
         },
         {
           "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "reference_expression",
           "named": true
         },
         {
@@ -2265,6 +2417,10 @@
             "named": true
           },
           {
+            "type": "reference_expression",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -2344,6 +2500,10 @@
           },
           {
             "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "reference_expression",
             "named": true
           },
           {
@@ -2536,6 +2696,10 @@
           "named": true
         },
         {
+          "type": "reference_expression",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -2685,6 +2849,10 @@
   },
   {
     "type": "%}",
+    "named": false
+  },
+  {
+    "type": "&",
     "named": false
   },
   {

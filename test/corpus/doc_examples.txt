@@ -110,6 +110,23 @@ assignments_2
 {% let foo = "baz" %}
 {{ foo }}
 
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (string_literal)))
+  (render_expression
+    (identifier))
+  (control_tag
+    (let_statement
+      (identifier)
+      (string_literal)))
+  (render_expression
+    (identifier))
+  (content))
+
 ================================================================================
 assignments_3
 ================================================================================
@@ -896,6 +913,97 @@ match_7
   (content)
   (control_tag
     (endmatch_statement))
+  (content))
+
+================================================================================
+ref_and_deref_1
+================================================================================
+
+{% let x = &"bla" %}
+{% if *x == "bla" %}
+Just talking
+{% else if x == &"another" %}
+Another?!
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (reference_expression
+        (string_literal))))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (unary_expression
+          (identifier))
+        (string_literal))))
+  (content)
+  (control_tag
+    (else_if_statement
+      (binary_expression
+        (identifier)
+        (reference_expression
+          (string_literal)))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+ref_and_deref_2
+================================================================================
+
+{% let x = &&"bla" %}
+{% if *&**x == "bla" %}
+You got it
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (reference_expression
+        (reference_expression
+          (string_literal)))))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (unary_expression
+          (reference_expression
+            (unary_expression
+              (unary_expression
+                (identifier)))))
+        (string_literal))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+include
+================================================================================
+
+{% for i in iter %}
+  {% include "item.html" %}
+{% endfor %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (control_tag
+    (include_statement
+      (string_literal)))
+  (control_tag
+    (endfor_statement))
   (content))
 
 ================================================================================
