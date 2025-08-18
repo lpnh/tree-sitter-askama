@@ -64,6 +64,10 @@
           "named": true
         },
         {
+          "type": "string_concatenation",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -152,6 +156,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -291,6 +299,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -443,6 +455,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -693,6 +709,10 @@
             "named": true
           },
           {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -898,6 +918,10 @@
         },
         {
           "type": "reference_expression",
+          "named": true
+        },
+        {
+          "type": "string_concatenation",
           "named": true
         },
         {
@@ -1151,6 +1175,10 @@
             "named": true
           },
           {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1240,6 +1268,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -1366,6 +1398,10 @@
         },
         {
           "type": "reference_expression",
+          "named": true
+        },
+        {
+          "type": "string_concatenation",
           "named": true
         },
         {
@@ -1544,6 +1580,10 @@
             "named": true
           },
           {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1671,6 +1711,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -1833,6 +1877,10 @@
             "named": true
           },
           {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1928,6 +1976,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -2059,6 +2111,10 @@
         },
         {
           "type": "reference_expression",
+          "named": true
+        },
+        {
+          "type": "string_concatenation",
           "named": true
         },
         {
@@ -2222,6 +2278,10 @@
             "named": true
           },
           {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -2306,6 +2366,10 @@
           "named": true
         },
         {
+          "type": "string_concatenation",
+          "named": true
+        },
+        {
           "type": "string_literal",
           "named": true
         },
@@ -2347,6 +2411,21 @@
         },
         {
           "type": "render_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "string_concatenation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -2418,6 +2497,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -2504,6 +2587,10 @@
           },
           {
             "type": "reference_expression",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -2697,6 +2784,10 @@
         },
         {
           "type": "reference_expression",
+          "named": true
+        },
+        {
+          "type": "string_concatenation",
           "named": true
         },
         {
@@ -3161,6 +3252,10 @@
   },
   {
     "type": "}}",
+    "named": false
+  },
+  {
+    "type": "~",
     "named": false
   },
   {

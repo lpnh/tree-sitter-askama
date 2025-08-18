@@ -1315,6 +1315,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "string_concatenation"
+        },
+        {
+          "type": "SYMBOL",
           "name": "is_defined_expression"
         },
         {
@@ -1637,6 +1641,31 @@
                   "type": "SYMBOL",
                   "name": "_expression"
                 }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "string_concatenation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "~"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
               }
             ]
           }

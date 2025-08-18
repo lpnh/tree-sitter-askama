@@ -231,6 +231,7 @@ module.exports = grammar({
     _expression: $ =>
       choice(
         $.binary_expression,
+        $.string_concatenation,
         $.is_defined_expression,
         $.filter_expression,
         $._postfix_expression,
@@ -263,6 +264,9 @@ module.exports = grammar({
         ),
       )
     },
+
+    string_concatenation: $ =>
+      seq($.identifier, repeat1(seq('~', $.identifier))),
 
     is_defined_expression: $ =>
       seq(

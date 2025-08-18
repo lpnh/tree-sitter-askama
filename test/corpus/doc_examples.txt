@@ -1007,6 +1007,98 @@ include
   (content))
 
 ================================================================================
+expressions_1
+================================================================================
+
+{{ 3 * 4 / 2 }}
+{{ 26 / 2 % 7 }}
+{{ 3 % 2 * 6 }}
+{{ 1 * 2 + 4 }}
+{{ 11 - 15 / 3 }}
+{{ (4 + 5) % 3 }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (binary_expression
+      (binary_expression
+        (number_literal)
+        (number_literal))
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (binary_expression
+        (number_literal)
+        (number_literal))
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (binary_expression
+        (number_literal)
+        (number_literal))
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (binary_expression
+        (number_literal)
+        (number_literal))
+      (number_literal)))
+  (render_expression
+    (binary_expression
+      (number_literal)
+      (binary_expression
+        (number_literal)
+        (number_literal))))
+  (render_expression
+    (binary_expression
+      (parenthesized_expression
+        (binary_expression
+          (number_literal)
+          (number_literal)))
+      (number_literal)))
+  (content))
+
+================================================================================
+expressions_2
+================================================================================
+
+{% if my_bitset bitand 1 != 0 %}
+    It is set!
+{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (number_literal))
+        (number_literal))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
+string_concatenation
+================================================================================
+
+{{ a ~ b ~ c }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (string_concatenation
+      (identifier)
+      (identifier)
+      (identifier)))
+  (content))
+
+================================================================================
 comment_1
 ================================================================================
 
