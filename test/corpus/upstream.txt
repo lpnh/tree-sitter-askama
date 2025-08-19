@@ -97,55 +97,55 @@ allow-whitespaces
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (index_expression
       (field_access_expression
         (field_access_expression
           (identifier)
-          (identifier))
-        (identifier))
+          (field_identifier))
+        (field_identifier))
       (number_literal)))
   (render_expression
     (index_expression
       (field_access_expression
         (field_access_expression
           (identifier)
-          (identifier))
-        (identifier))
+          (field_identifier))
+        (field_identifier))
       (number_literal)))
   (render_expression
     (index_expression
       (field_access_expression
         (field_access_expression
           (identifier)
-          (identifier))
-        (identifier))
+          (field_identifier))
+        (field_identifier))
       (string_literal)))
   (control_tag
     (let_statement
@@ -153,8 +153,8 @@ allow-whitespaces
       (field_access_expression
         (field_access_expression
           (identifier)
-          (identifier))
-        (identifier))))
+          (field_identifier))
+        (field_identifier))))
   (comment)
   (comment)
   (render_expression
@@ -373,46 +373,46 @@ allow-whitespaces
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal))))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal))))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal))))
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal)
         (string_literal))))
@@ -420,7 +420,7 @@ allow-whitespaces
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal)
         (string_literal))))
@@ -428,7 +428,7 @@ allow-whitespaces
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments
         (string_literal)
         (string_literal))))
@@ -461,18 +461,22 @@ allow-whitespaces
   (control_tag
     (when_statement
       (path_expression
-        (identifier)
-        (identifier)
-        (identifier)
+        (path_expression
+          (path_expression
+            (identifier)
+            (identifier))
+          (identifier))
         (identifier))))
   (control_tag
     (endmatch_statement))
   (render_expression
     (call_expression
       (path_expression
-        (identifier)
-        (identifier)
-        (identifier)
+        (path_expression
+          (path_expression
+            (identifier)
+            (identifier))
+          (identifier))
         (identifier))
       (arguments)))
   (comment)
@@ -490,7 +494,7 @@ attr
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content))
 
 ================================================================================
@@ -841,7 +845,7 @@ for-range
     (if_statement
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (content)
   (control_tag
     (endif_statement))
@@ -849,7 +853,7 @@ for-range
     (if_statement
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (content)
   (control_tag
     (endif_statement))
@@ -905,7 +909,7 @@ for
   (render_expression
     (field_access_expression
      (identifier)
-     (identifier)))
+     (field_identifier)))
   (content)
   (render_expression
     (identifier))
@@ -913,7 +917,7 @@ for
     (if_statement
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (content)
   (control_tag
     (endif_statement))
@@ -928,7 +932,7 @@ for
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (render_expression
     (identifier))
@@ -939,7 +943,7 @@ for
     (if_statement
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (content)
   (control_tag
     (endif_statement))
@@ -1505,14 +1509,14 @@ option
       (call_expression
         (field_access_expression
           (identifier)
-          (identifier))
+          (field_identifier))
         (arguments))))
   (content)
   (render_expression
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (control_tag
     (else_statement))
@@ -1604,7 +1608,7 @@ teams
       (binary_expression
         (field_access_expression
           (identifier)
-          (identifier))
+          (field_identifier))
         (number_literal))))
   (content)
   (control_tag
@@ -1613,12 +1617,12 @@ teams
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (control_tag
     (endfor_statement))

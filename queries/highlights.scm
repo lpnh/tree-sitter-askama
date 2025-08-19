@@ -160,7 +160,7 @@
 
 ; Field variables
 (field_access_expression
-  field: (identifier) @variable.member)
+  field: (field_identifier) @variable.member)
 
 (field_access_expression
   field: (number_literal) @variable.member)
@@ -171,7 +171,7 @@
 
 (call_expression
   (field_access_expression
-    field: (identifier) @function.call))
+    field: (field_identifier) @function.call))
 
 (call_expression
   (path_expression

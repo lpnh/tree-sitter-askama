@@ -67,14 +67,14 @@ assignments_1
       (identifier)
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (control_tag
     (let_statement
       (identifier)
       (call_expression
         (field_access_expression
           (identifier)
-          (identifier))
+          (field_identifier))
         (arguments))))
   (control_tag
     (let_statement
@@ -148,7 +148,7 @@ you need it to be mutable #}
           (array_expression
             (number_literal)
             (number_literal))
-          (identifier))
+          (field_identifier))
         (arguments))))
   (render_expression
     (call_expression
@@ -156,9 +156,9 @@ you need it to be mutable #}
         (call_expression
           (field_access_expression
             (identifier)
-            (identifier))
+            (field_identifier))
           (arguments))
-        (identifier))
+        (field_identifier))
       (arguments)))
   (content))
 
@@ -302,8 +302,9 @@ calling_functions
   (render_expression
     (call_expression
       (path_expression
-        (identifier)
-        (identifier)
+        (path_expression
+          (identifier)
+          (identifier))
         (identifier))
       (arguments)))
   (content))
@@ -444,7 +445,7 @@ for_1
     (filter_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (filter_chain
         (filter
           (identifier)))))
@@ -480,12 +481,12 @@ for_2
     (if_statement
       (field_access_expression
         (identifier)
-        (identifier))))
+        (field_identifier))))
   (content)
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (control_tag
     (else_statement))
@@ -493,12 +494,12 @@ for_2
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (control_tag
     (endif_statement))
@@ -529,7 +530,7 @@ if
         (call_expression
           (field_access_expression
             (identifier)
-            (identifier))
+            (field_identifier))
           (arguments))
         (number_literal))))
   (content)
@@ -539,7 +540,7 @@ if
         (call_expression
           (field_access_expression
             (identifier)
-            (identifier))
+            (field_identifier))
           (arguments))
         (number_literal))))
   (content)
@@ -549,7 +550,7 @@ if
         (call_expression
           (field_access_expression
             (identifier)
-            (identifier))
+            (field_identifier))
           (arguments))
         (number_literal))))
   (content)
@@ -559,7 +560,7 @@ if
     (call_expression
       (field_access_expression
         (identifier)
-        (identifier))
+        (field_identifier))
       (arguments)))
   (content)
   (control_tag
@@ -589,7 +590,7 @@ if_let
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (control_tag
     (else_statement))
   (content)
@@ -1605,7 +1606,7 @@ macro_call_block_args
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (render_expression
     (call_expression
@@ -1630,12 +1631,12 @@ macro_call_block_args
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (render_expression
     (field_access_expression
       (identifier)
-      (identifier)))
+      (field_identifier)))
   (content)
   (control_tag
     (endcall_statement))

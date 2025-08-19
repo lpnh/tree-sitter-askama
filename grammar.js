@@ -88,9 +88,9 @@ module.exports = grammar({
 
     endfilter_statement: _ => 'endfilter',
 
-    extends_statement: $ => seq('extends', field('template', $.string_literal)),
+    extends_statement: $ => seq('extends', $.string_literal),
 
-    include_statement: $ => seq('include', field('template', $.string_literal)),
+    include_statement: $ => seq('include', $.string_literal),
 
     import_statement: $ =>
       seq(
@@ -172,7 +172,12 @@ module.exports = grammar({
       choice($.string_literal, $.number_literal, $.boolean_literal),
 
     tuple_struct_pattern: $ =>
-      seq(field('type', $.identifier), '(', optional(_list($._pattern)), ')'),
+      seq(
+        field('type', choice($.identifier, $.path_expression)),
+        '(',
+        optional(_list($._pattern)),
+        ')',
+      ),
 
     array_pattern: $ =>
       seq('[', optional(_list(choice($._pattern, $.wildcard))), ']'),
@@ -231,11 +236,21 @@ module.exports = grammar({
 
     _expression_except_range: $ =>
       choice(
+        $.unary_expression,
+        $.reference_expression,
         $.binary_expression,
-        $.string_concatenation,
-        $.is_defined_expression,
+        $.call_expression,
+        $.path_expression,
+        $.field_access_expression,
+        $.array_expression,
+        $.tuple_expression,
+        $.parenthesized_expression,
+        prec(1, $.macro_invocation),
+        $.index_expression,
         $.filter_expression,
-        $._postfix_expression,
+        $.is_defined_expression,
+        $.string_concatenation,
+        $._primary_expression,
       ),
 
     binary_expression: $ => {
@@ -275,10 +290,7 @@ module.exports = grammar({
     filter_expression: $ =>
       prec.left(
         PREC.filter,
-        seq(
-          field('value', $._postfix_expression),
-          field('filters', $.filter_chain),
-        ),
+        seq(field('value', $._expression), field('filters', $.filter_chain)),
       ),
 
     filter_chain: $ => prec.left(PREC.filter, seq('|', sepBy1($.filter, '|'))),
@@ -291,17 +303,6 @@ module.exports = grammar({
         ),
       ),
 
-    _postfix_expression: $ =>
-      choice(
-        prec(1, $.macro_invocation),
-        $.call_expression,
-        $.field_access_expression,
-        $.index_expression,
-        $.unary_expression,
-        $.reference_expression,
-        $._atom_expression,
-      ),
-
     macro_invocation: $ =>
       seq(
         field('macro', choice($.identifier, $.path_expression)),
@@ -310,7 +311,7 @@ module.exports = grammar({
       ),
 
     call_expression: $ =>
-      prec.left(
+      prec(
         PREC.calls,
         seq(
           field('function', $._expression_except_range),
@@ -322,18 +323,9 @@ module.exports = grammar({
       prec.left(
         PREC.field,
         seq(
-          field(
-            'object',
-            choice(
-              $.identifier,
-              $.path_expression,
-              $.call_expression,
-              $.field_access_expression,
-              $.array_expression,
-            ),
-          ),
+          field('value', $._expression),
           '.',
-          field('field', choice($.identifier, $.number_literal)),
+          field('field', choice($._field_identifier, $.number_literal)),
         ),
       ),
 
@@ -344,9 +336,9 @@ module.exports = grammar({
       prec.left(
         PREC.range,
         choice(
-          seq($._atom_expression, choice('..', '..='), $._atom_expression),
-          seq($._atom_expression, '..'),
-          seq('..', $._atom_expression),
+          seq($._expression, choice('..', '..='), $._expression),
+          seq($._expression, '..'),
+          seq('..', $._expression),
           '..',
         ),
       ),
@@ -363,21 +355,14 @@ module.exports = grammar({
     named_argument: $ =>
       seq(field('name', $.identifier), '=', field('value', $._expression)),
 
-    _atom_expression: $ =>
-      choice(
-        $.path_expression,
-        $.parenthesized_expression,
-        $.tuple_expression,
-        $.unit_expression,
-        $.array_expression,
-        $._primary_expression,
-      ),
-
     path_expression: $ =>
       seq(
-        field('path', $.identifier),
-        repeat1(seq('::', field('name', $.identifier))),
+        field('path', optional($._path)),
+        '::',
+        field('name', choice($.identifier)),
       ),
+
+    _path: $ => choice($.identifier, $.path_expression),
 
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
@@ -390,8 +375,6 @@ module.exports = grammar({
         optional(','),
         ')',
       ),
-
-    unit_expression: _ => seq('(', ')'),
 
     array_expression: $ =>
       seq('[', optional(field('elements', _list($._expression))), ']'),
@@ -415,6 +398,8 @@ module.exports = grammar({
     string_literal: _ => token(/"([^"\\]|\\.)*"/),
 
     identifier: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+
+    _field_identifier: $ => alias($.identifier, $.field_identifier),
   },
 })
 
