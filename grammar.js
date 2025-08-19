@@ -95,9 +95,9 @@ module.exports = grammar({
     import_statement: $ =>
       seq(
         'import',
-        field('template', $.string_literal),
+        field('path', $.string_literal),
         'as',
-        field('name', $.identifier),
+        field('alias', $.identifier),
       ),
 
     let_statement: $ =>
@@ -206,12 +206,8 @@ module.exports = grammar({
       seq(
         'macro',
         field('name', $.identifier),
-        '(',
-        optional(field('arguments', $.macro_arguments)),
-        ')',
+        field('arguments', $.arguments),
       ),
-
-    macro_arguments: $ => _list(choice($.named_argument, $.identifier)),
 
     endmacro_statement: $ =>
       seq('endmacro', optional(field('name', $.identifier))),
@@ -289,11 +285,8 @@ module.exports = grammar({
     filter: $ =>
       seq(
         field('name', $.identifier),
-        field('arguments', optional($.filter_arguments)),
+        field('arguments', optional($.arguments)),
       ),
-
-    filter_arguments: $ =>
-      seq('(', optional(_list(choice($.named_argument, $._expression))), ')'),
 
     _postfix_expression: $ =>
       choice(
@@ -357,7 +350,8 @@ module.exports = grammar({
     reference_expression: $ =>
       prec(PREC.unary, seq('&', field('value', $._expression))),
 
-    arguments: $ => seq('(', optional(_list($._expression)), ')'),
+    arguments: $ =>
+      seq('(', optional(_list(choice($.named_argument, $._expression))), ')'),
 
     named_argument: $ =>
       seq(field('name', $.identifier), '=', field('value', $._expression)),

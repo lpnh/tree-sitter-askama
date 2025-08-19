@@ -1124,3 +1124,323 @@ A Comment
 (source
   (comment)
   (content))
+
+================================================================================
+macros_1
+================================================================================
+
+{% macro heading(required_arg, optional_arg = "default subtitle") %}
+    <h1>{{required_arg}}</h1>
+    <h2>{{optional_arg}}</h2>
+    {{ variable_in_scope }}
+{% endmacro %}
+
+{# Variable scope that will be passed into macro invocations #}
+{% set variable_in_scope = 5 %}
+
+{# Invoke the macro by supplying all arguments #}
+{{ heading("test", "good subtitle") }}
+
+{# Invoke the macro by leaving out the optional argument `optional_arg` #}
+{# This will use the default value `default subtitle` #}
+{{ heading("test") }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier)
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endmacro_statement))
+  (comment)
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (string_literal))))
+  (comment)
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal))))
+  (content))
+
+================================================================================
+macros_2
+================================================================================
+
+{% macro heading(required_arg, optional_arg = "default subtitle") %}
+    {# ... #}
+{% endmacro heading %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier)
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (comment)
+  (control_tag
+    (endmacro_statement
+      (identifier)))
+  (content))
+
+================================================================================
+imports_and_scopes
+================================================================================
+
+{% import "macro.html" as scope %}
+
+{{ scope::heading("test") }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (import_statement
+      (string_literal)
+      (identifier)))
+  (render_expression
+    (call_expression
+      (path_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string_literal))))
+  (content))
+
+================================================================================
+named_arguments_1
+================================================================================
+
+{% macro heading(title, font_weight = "normal", font_size = 13) %}
+    <h1 style="font-weight: {{ font_weight }}; font-size: {{ font_size }};">
+        {{ title }}
+    </h1>
+{% endmacro %}
+
+{# using positional arguments #}
+{{ heading("Super Heading", "bold", 13) }}
+{# using named arguments #}
+{{ heading(title = "Super Heading", font_weight = "bold") }}
+{{ heading(title = "Super Heading", font_weight = "bold", font_size = 23) }}
+{{ heading(title = "Super Heading", font_size = 42, font_weight = "bold") }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier)
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (number_literal)))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (string_literal)
+        (number_literal))))
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (number_literal)))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (number_literal))
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (content))
+
+================================================================================
+named_arguments_2
+================================================================================
+
+{{ heading("Super Heading", font_weight = "bold", font_size = 26) }}
+{{ heading("Super Heading", font_size = 26, font_weight = "bold") }}
+{{ heading("Super Heading", "bold", font_size = 26) }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (number_literal)))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (named_argument
+          (identifier)
+          (number_literal))
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (string_literal)
+        (named_argument
+          (identifier)
+          (number_literal)))))
+  (content))
+
+================================================================================
+named_arguments_3
+================================================================================
+
+{% macro heading(arg1, arg2, arg3, arg4) %}
+{% endmacro %}
+
+{{ heading("something", "b", arg4 = "ah", arg2 = "title") }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier))))
+  (control_tag
+    (endmacro_statement))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (string_literal)
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (content))
+
+================================================================================
+named_arguments_4
+================================================================================
+
+{{ heading("something", arg3 = "b", arg4 = "ah", arg2 = "title") }}
+{# Equivalent of: #}
+{{ heading("something", "title", "b", arg4 = "ah") }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (string_literal))
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal)
+        (string_literal)
+        (string_literal)
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (content))

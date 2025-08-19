@@ -163,7 +163,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -173,7 +173,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -183,7 +183,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -195,7 +195,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -207,7 +207,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -219,7 +219,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -231,7 +231,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -249,7 +249,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (filter_expression
@@ -267,7 +267,7 @@ allow-whitespaces
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (number_literal))))))
   (render_expression
     (number_literal))
@@ -803,7 +803,7 @@ filters_join
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (string_literal))))))
   (content))
 
@@ -962,7 +962,7 @@ format
       (filter_chain
         (filter
           (identifier)
-          (filter_arguments
+          (arguments
             (identifier))))))
   (content))
 
@@ -1147,7 +1147,7 @@ macro
   (control_tag
     (macro_statement
       (identifier)
-      (macro_arguments
+      (arguments
         (identifier))))
   (render_expression
     (identifier))
@@ -1170,7 +1170,7 @@ macro
   (control_tag
     (macro_statement
       (identifier)
-      (macro_arguments
+      (arguments
         (identifier))))
   (render_expression
     (identifier))
@@ -1209,7 +1209,8 @@ macro-import-callexpr
       (identifier)))
   (control_tag
     (macro_statement
-      (identifier)))
+      (identifier)
+      (arguments)))
   (render_expression
     (call_expression
       (path_expression
@@ -1242,7 +1243,8 @@ macro-with-caller
 (source
   (control_tag
     (macro_statement
-      (identifier)))
+      (identifier)
+      (arguments)))
   (content)
   (render_expression
     (call_expression
@@ -1253,13 +1255,15 @@ macro-with-caller
     (endmacro_statement))
   (control_tag
     (macro_statement
-      (identifier)))
+      (identifier)
+      (arguments)))
   (content)
   (control_tag
     (endmacro_statement))
   (control_tag
     (macro_statement
-      (identifier)))
+      (identifier)
+      (arguments)))
   (content)
   (control_tag
     (macro_call_statement
@@ -1452,7 +1456,7 @@ named-end
   (control_tag
     (macro_statement
       (identifier)
-      (macro_arguments
+      (arguments
         (identifier))))
   (control_tag
     (if_statement
