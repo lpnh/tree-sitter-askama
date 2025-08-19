@@ -179,14 +179,14 @@
 
 ; Macro invocations
 (macro_invocation
-  macro: (identifier) @function.call)
+  macro: (identifier) @constant.macro)
 
 (macro_invocation
   macro: (path_expression
-    (identifier) @function.call .))
+    (identifier) @constant.macro .))
 
 (macro_invocation
-  "!" @function.call)
+  "!" @constant.macro)
 
 (call_expression
   function: (identifier) @constant.builtin
