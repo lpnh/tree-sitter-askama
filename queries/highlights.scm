@@ -21,6 +21,16 @@
   name: (identifier) @type
   (#lua-match? @type "^[A-Z]"))
 
+((path_expression
+  name: (identifier) @constant)
+  (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
+
+((path_expression
+  path: (identifier) @type
+  name: (identifier) @constant)
+  (#lua-match? @type "^[A-Z]")
+  (#lua-match? @constant "^[A-Z]"))
+
 ; Literals
 (string_literal) @string
 
@@ -166,6 +176,17 @@
 (call_expression
   (path_expression
     name: (identifier) @function))
+
+; Macro invocations
+(macro_invocation
+  macro: (identifier) @function.call)
+
+(macro_invocation
+  macro: (path_expression
+    (identifier) @function.call .))
+
+(macro_invocation
+  "!" @function.call)
 
 (call_expression
   function: (identifier) @constant.builtin

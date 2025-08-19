@@ -162,6 +162,7 @@ module.exports = grammar({
         $.array_pattern,
         $.tuple_pattern,
         $.path_expression,
+        $.macro_invocation,
         $.placeholder,
       ),
 
@@ -226,7 +227,9 @@ module.exports = grammar({
 
     endcall_statement: _ => 'endcall',
 
-    _expression: $ =>
+    _expression: $ => choice($._expression_except_range, $.range_expression),
+
+    _expression_except_range: $ =>
       choice(
         $.binary_expression,
         $.string_concatenation,
@@ -281,30 +284,36 @@ module.exports = grammar({
     filter_chain: $ => prec.left(PREC.filter, seq('|', sepBy1($.filter, '|'))),
 
     filter: $ =>
-      seq(
-        field('name', $.identifier),
-        field('arguments', optional($.arguments)),
+      prec.right(
+        seq(
+          field('name', $.identifier),
+          field('arguments', optional($.arguments)),
+        ),
       ),
 
     _postfix_expression: $ =>
       choice(
+        prec(1, $.macro_invocation),
         $.call_expression,
         $.field_access_expression,
         $.index_expression,
-        $.range_expression,
         $.unary_expression,
         $.reference_expression,
         $._atom_expression,
+      ),
+
+    macro_invocation: $ =>
+      seq(
+        field('macro', choice($.identifier, $.path_expression)),
+        '!',
+        alias($.arguments, $.token_tree),
       ),
 
     call_expression: $ =>
       prec.left(
         PREC.calls,
         seq(
-          field(
-            'function',
-            choice($.identifier, $.path_expression, $.field_access_expression),
-          ),
+          field('function', $._expression_except_range),
           field('arguments', $.arguments),
         ),
       ),
@@ -405,7 +414,7 @@ module.exports = grammar({
 
     string_literal: _ => token(/"([^"\\]|\\.)*"/),
 
-    identifier: _ => token(/[a-zA-Z_][a-zA-Z0-9_]*!?/),
+    identifier: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
   },
 })
 

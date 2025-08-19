@@ -1704,3 +1704,43 @@ nesting_macros_with_content
   (control_tag
     (endmacro_statement))
   (content))
+
+================================================================================
+calling_rust_macros_1
+================================================================================
+
+{% let s = format!("{}", 12) %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (macro_invocation
+        (identifier)
+        (token_tree
+          (string_literal)
+          (number_literal)))))
+  (content))
+
+================================================================================
+calling_rust_macros_2
+================================================================================
+
+{% let entity = entity %}
+{{ test_macro!(entity) }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (identifier)))
+  (render_expression
+    (macro_invocation
+      (identifier)
+      (token_tree
+        (identifier))))
+  (content))

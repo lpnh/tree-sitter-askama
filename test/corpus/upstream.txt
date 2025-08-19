@@ -1532,11 +1532,11 @@ Hello, {{ foo::hello2!() }}!
 (source
   (content)
   (render_expression
-    (call_expression
+    (macro_invocation
       (path_expression
         (identifier)
         (identifier))
-      (arguments)))
+      (token_tree)))
   (content))
 
 ================================================================================
