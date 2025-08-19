@@ -1173,42 +1173,46 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "("
-                  },
-                  {
-                    "type": "SEQ",
-                    "members": [
-                      {
-                        "type": "SYMBOL",
-                        "name": "identifier"
-                      },
-                      {
-                        "type": "REPEAT",
-                        "content": {
-                          "type": "SEQ",
-                          "members": [
-                            {
-                              "type": "STRING",
-                              "value": ","
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "identifier"
-                            }
-                          ]
+                "type": "FIELD",
+                "name": "arguments",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "("
+                    },
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "identifier"
+                        },
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "identifier"
+                              }
+                            ]
+                          }
                         }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "STRING",
-                    "value": ")"
-                  }
-                ]
+                      ]
+                    },
+                    {
+                      "type": "STRING",
+                      "value": ")"
+                    }
+                  ]
+                }
               },
               {
                 "type": "BLANK"
@@ -1216,12 +1220,8 @@
             ]
           },
           {
-            "type": "FIELD",
-            "name": "call",
-            "content": {
-              "type": "SYMBOL",
-              "name": "call_expression"
-            }
+            "type": "SYMBOL",
+            "name": "call_expression"
           }
         ]
       }
@@ -1600,33 +1600,30 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "FIELD",
-          "name": "expression",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_primary_expression"
-          }
+          "type": "SYMBOL",
+          "name": "_primary_expression"
         },
         {
-          "type": "FIELD",
-          "name": "operator",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "is"
-              },
-              {
-                "type": "STRING",
-                "value": "is not"
-              }
-            ]
-          }
-        },
-        {
-          "type": "STRING",
-          "value": "defined"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "is"
+                },
+                {
+                  "type": "STRING",
+                  "value": "is not"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": "defined"
+            }
+          ]
         }
       ]
     },

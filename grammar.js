@@ -217,8 +217,10 @@ module.exports = grammar({
         PREC.macro_calls,
         seq(
           'call',
-          optional(seq('(', sepBy1($.identifier, ','), ')')),
-          field('call', $.call_expression),
+          optional(
+            field('arguments', seq('(', sepBy1($.identifier, ','), ')')),
+          ),
+          $.call_expression,
         ),
       ),
 
@@ -265,11 +267,7 @@ module.exports = grammar({
       seq($.identifier, repeat1(seq('~', $.identifier))),
 
     is_defined_expression: $ =>
-      seq(
-        field('expression', $._primary_expression),
-        field('operator', choice('is', 'is not')),
-        'defined',
-      ),
+      seq($._primary_expression, seq(choice('is', 'is not'), 'defined')),
 
     filter_expression: $ =>
       prec.left(

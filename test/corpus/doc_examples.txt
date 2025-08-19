@@ -1444,3 +1444,263 @@ named_arguments_4
           (identifier)
           (string_literal)))))
   (content))
+
+================================================================================
+macro_call_blocks_1
+================================================================================
+
+{% macro centered() %}
+    <center>
+        {# insert the invocation's body here: #}
+        {{ caller() }}
+    <center>
+{% endmacro %}
+
+{# This macro has to use the call block syntax, because it's expecting a body: #}
+{% call centered() %}
+    This text will be centered
+{% endcall %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments)))
+  (content)
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (comment)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments))))
+  (content)
+  (control_tag
+    (endcall_statement))
+  (content))
+
+================================================================================
+macro_call_blocks_2
+================================================================================
+
+{% macro render_dialog(title, class="dialog") -%}
+    <div class="{{ class }}">
+        <h2>{{ title }}</h2>
+        <div class="contents">
+            {% if caller is defined %}
+                {{ caller() }}
+            {% else %}
+                Empty dialog without content
+            {% endif %}
+        </div>
+    </div>
+{%- endmacro %}
+
+{# invoking it without body: no `caller` will be defined #}
+{{ render_dialog("Empty Dialog") }}
+
+{# invoking it with body: #}
+{% call render_dialog("Nice Dialog") %}
+    This is a simple dialog rendered by using a macro and
+    a call block.
+{% endcall %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier)
+        (named_argument
+          (identifier)
+          (string_literal)))))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (if_statement
+      (is_defined_expression
+        (identifier))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endif_statement))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (comment)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (string_literal))))
+  (comment)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments
+          (string_literal)))))
+  (content)
+  (control_tag
+    (endcall_statement))
+  (content))
+
+================================================================================
+macro_call_block_args
+================================================================================
+
+{% macro dump_users(users) -%}
+    <ul>
+    {%- for user in users %}
+        <li><p>{{ user.username }}</p>{{ caller(user) }}</li>
+    {%- endfor %}
+    </ul>
+{%- endmacro %}
+
+{# This callblock declares the argument `user` for `caller`: #}
+{% call(user) dump_users(list_of_users) %}
+    <dl>
+        <dt>Realname</dt>
+        <dd>{{ user.realname }}</dd>
+        <dt>Description</dt>
+        <dd>{{ user.description }}</dd>
+    </dl>
+{% endcall %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments
+        (identifier))))
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments
+        (identifier))))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (comment)
+  (control_tag
+    (macro_call_statement
+      (identifier)
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier)))))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_access_expression
+      (identifier)
+      (identifier)))
+  (content)
+  (control_tag
+    (endcall_statement))
+  (content))
+
+================================================================================
+nesting_macros_with_content
+================================================================================
+
+{% macro container() %}
+    <div class="container">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro outer_container() %}
+    {# Create an alias to our `caller`, so we can access it within container: #}
+    {% set outer_caller = caller %}
+
+    <div class="outer-container">
+        {# nested macro invocation - will overwrite the `caller` variable: #}
+        {% call container() %}
+            {{ outer_caller() }}
+        {% endcall %}
+    </div>
+{% endmacro %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments)))
+  (content)
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (control_tag
+    (macro_statement
+      (identifier)
+      (arguments)))
+  (comment)
+  (control_tag
+    (let_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (comment)
+  (control_tag
+    (macro_call_statement
+      (call_expression
+        (identifier)
+        (arguments))))
+  (render_expression
+    (call_expression
+      (identifier)
+      (arguments)))
+  (control_tag
+    (endcall_statement))
+  (content)
+  (control_tag
+    (endmacro_statement))
+  (content))
