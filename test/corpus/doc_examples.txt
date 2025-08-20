@@ -12,7 +12,7 @@ constants
 
 --------------------------------------------------------------------------------
 
-  (source
+(source
   (content)
   (render_expression
     (path_expression
@@ -175,8 +175,7 @@ filter_blocks_1
 (source
   (control_tag
     (filter_statement
-      (filter
-        (identifier))))
+      (identifier)))
   (render_expression
     (identifier))
   (content)
@@ -199,10 +198,8 @@ filter_blocks_2
 (source
   (control_tag
     (filter_statement
-      (filter
-        (identifier))
-      (filter
-        (identifier))))
+      (identifier)
+      (identifier)))
   (render_expression
     (identifier))
   (content)
@@ -420,7 +417,6 @@ child_template
     (endblock_statement))
   (content))
 
-
 ================================================================================
 for_1
 ================================================================================
@@ -446,9 +442,7 @@ for_1
       (field_access_expression
         (identifier)
         (field_identifier))
-      (filter_chain
-        (filter
-          (identifier)))))
+      (identifier)))
   (content)
   (control_tag
     (endfor_statement))

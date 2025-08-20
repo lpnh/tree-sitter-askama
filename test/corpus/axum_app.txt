@@ -425,9 +425,7 @@ greet
   (render_expression
     (filter_expression
       (identifier)
-      (filter_chain
-        (filter
-          (identifier)))))
+      (identifier)))
   (content)
   (control_tag
     (match_statement
@@ -462,14 +460,10 @@ greet
           (filter_expression
             (filter_expression
               (identifier)
-              (filter_chain
-                (filter
-                  (identifier))))
-            (filter_chain
-              (filter
-                (identifier)
-                (arguments
-                  (string_literal)))))))))
+              (identifier))
+            (identifier)
+            (arguments
+              (string_literal)))))))
   (control_tag
     (endcall_statement))
   (control_tag

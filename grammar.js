@@ -83,8 +83,7 @@ module.exports = grammar({
     endblock_statement: $ =>
       seq('endblock', optional(field('name', $.identifier))),
 
-    filter_statement: $ =>
-      seq('filter', field('filters', sepBy1($.filter, '|'))),
+    filter_statement: $ => seq('filter', sepBy1($._filter, '|')),
 
     endfilter_statement: _ => 'endfilter',
 
@@ -290,15 +289,13 @@ module.exports = grammar({
     filter_expression: $ =>
       prec.left(
         PREC.filter,
-        seq(field('value', $._expression), field('filters', $.filter_chain)),
+        seq(field('value', $._expression), repeat1(seq('|', $._filter))),
       ),
 
-    filter_chain: $ => prec.left(PREC.filter, seq('|', sepBy1($.filter, '|'))),
-
-    filter: $ =>
+    _filter: $ =>
       prec.right(
         seq(
-          field('name', $.identifier),
+          field('filter', $.identifier),
           field('arguments', optional($.arguments)),
         ),
       ),

@@ -160,31 +160,25 @@ allow-whitespaces
   (render_expression
     (filter_expression
       (identifier)
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
         (identifier)
         (range_expression))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
         (identifier)
         (range_expression))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -192,11 +186,9 @@ allow-whitespaces
         (range_expression
           (number_literal)
           (number_literal)))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -204,11 +196,9 @@ allow-whitespaces
         (range_expression
           (number_literal)
           (number_literal)))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -216,11 +206,9 @@ allow-whitespaces
         (range_expression
           (number_literal)
           (number_literal)))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -228,11 +216,9 @@ allow-whitespaces
         (range_expression
           (number_literal)
           (number_literal)))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -246,11 +232,9 @@ allow-whitespaces
             (binary_expression
               (number_literal)
               (number_literal)))))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (filter_expression
       (index_expression
@@ -264,11 +248,9 @@ allow-whitespaces
             (binary_expression
               (number_literal)
               (number_literal)))))
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (number_literal))))))
+      (identifier)
+      (arguments
+        (number_literal))))
   (render_expression
     (number_literal))
   (render_expression
@@ -551,9 +533,7 @@ big-table
   (render_expression
     (filter_expression
       (identifier)
-      (filter_chain
-        (filter
-          (identifier)))))
+      (identifier)))
   (content)
   (control_tag
     (endfor_statement))
@@ -787,9 +767,7 @@ filters
   (render_expression
     (filter_expression
       (identifier)
-      (filter_chain
-        (filter
-          (identifier)))))
+      (identifier)))
   (content))
 
 ================================================================================
@@ -804,11 +782,9 @@ filters_join
   (render_expression
     (filter_expression
       (identifier)
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (string_literal))))))
+      (identifier)
+      (arguments
+        (string_literal))))
   (content))
 
 ================================================================================
@@ -908,8 +884,8 @@ for
       (identifier)))
   (render_expression
     (field_access_expression
-     (identifier)
-     (field_identifier)))
+      (identifier)
+      (field_identifier)))
   (content)
   (render_expression
     (identifier))
@@ -963,11 +939,9 @@ format
   (render_expression
     (filter_expression
       (string_literal)
-      (filter_chain
-        (filter
-          (identifier)
-          (arguments
-            (identifier))))))
+      (identifier)
+      (arguments
+        (identifier))))
   (content))
 
 ================================================================================
@@ -1627,7 +1601,6 @@ teams
   (control_tag
     (endfor_statement))
   (content))
-
 
 ================================================================================
 tuple-attr

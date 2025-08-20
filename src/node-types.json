@@ -958,11 +958,11 @@
     }
   },
   {
-    "type": "filter",
+    "type": "filter_expression",
     "named": true,
     "fields": {
       "arguments": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
@@ -971,43 +971,12 @@
           }
         ]
       },
-      "name": {
-        "multiple": false,
+      "filter": {
+        "multiple": true,
         "required": true,
         "types": [
           {
             "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "filter_chain",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "filter",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "filter_expression",
-    "named": true,
-    "fields": {
-      "filters": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "filter_chain",
             "named": true
           }
         ]
@@ -1104,17 +1073,23 @@
     "type": "filter_statement",
     "named": true,
     "fields": {
-      "filters": {
+      "arguments": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
+      "filter": {
         "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "filter",
+            "type": "identifier",
             "named": true
-          },
-          {
-            "type": "|",
-            "named": false
           }
         ]
       }

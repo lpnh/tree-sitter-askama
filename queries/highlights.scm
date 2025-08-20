@@ -204,8 +204,8 @@
   (#any-of? @constant.macro "super" ))
 
 ; Filter names
-(filter
-  name: (identifier) @function.builtin)
+(filter_expression
+  filter: (identifier) @function.builtin)
 
 ; Comments
 (comment) @comment @spell
