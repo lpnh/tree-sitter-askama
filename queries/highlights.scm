@@ -7,25 +7,25 @@
 ((identifier) @constant
   (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
 
-(path_expression
+(scoped_identifier
   path: (identifier) @module)
 
-(path_expression
+(scoped_identifier
   name: (identifier) @module)
 
-(path_expression
+(scoped_identifier
   path: (identifier) @type
   (#lua-match? @type "^[A-Z]"))
 
-(path_expression
+(scoped_identifier
   name: (identifier) @type
   (#lua-match? @type "^[A-Z]"))
 
-((path_expression
+((scoped_identifier
   name: (identifier) @constant)
   (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
 
-((path_expression
+((scoped_identifier
   path: (identifier) @type
   name: (identifier) @constant)
   (#lua-match? @type "^[A-Z]")
@@ -54,13 +54,10 @@
 
 ; Operators
 [
-  "|"
-] @punctuation.bracket
-
-[
   "!"
   "&"
   "~"
+  "|"
   "="
   ".."
   "..="
@@ -100,6 +97,8 @@
 [
   "for"
   "in"
+  (break_statement)
+  (continue_statement)
   (endfor_statement)
 ] @keyword.repeat
 
@@ -159,10 +158,10 @@
 ] @keyword.directive
 
 ; Field variables
-(field_access_expression
+(field_expression
   field: (field_identifier) @variable.member)
 
-(field_access_expression
+(field_expression
   field: (number_literal) @variable.member)
 
 ; Function calls
@@ -170,11 +169,11 @@
   function: (identifier) @function.call)
 
 (call_expression
-  (field_access_expression
+  (field_expression
     field: (field_identifier) @function.call))
 
 (call_expression
-  (path_expression
+  (scoped_identifier
     name: (identifier) @function))
 
 ; Macro invocations
@@ -182,7 +181,7 @@
   macro: (identifier) @constant.macro)
 
 (macro_invocation
-  macro: (path_expression
+  macro: (scoped_identifier
     (identifier) @constant.macro .))
 
 (macro_invocation
@@ -213,4 +212,4 @@
 ; Specials
 (placeholder) @character.special
 
-(wildcard) @character.special
+(remaining_field) @character.special

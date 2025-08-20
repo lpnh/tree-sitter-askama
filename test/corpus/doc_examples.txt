@@ -15,7 +15,7 @@ constants
 (source
   (content)
   (render_expression
-    (path_expression
+    (scoped_identifier
       (identifier)
       (identifier)))
   (content)
@@ -27,7 +27,7 @@ constants
     (if_statement
       (binary_expression
         (identifier)
-        (path_expression
+        (scoped_identifier
           (identifier)
           (identifier)))))
   (content)
@@ -65,14 +65,14 @@ assignments_1
   (control_tag
     (let_statement
       (identifier)
-      (field_access_expression
+      (field_expression
         (identifier)
         (field_identifier))))
   (control_tag
     (let_statement
       (identifier)
       (call_expression
-        (field_access_expression
+        (field_expression
           (identifier)
           (field_identifier))
         (arguments))))
@@ -144,7 +144,7 @@ you need it to be mutable #}
     (let_statement
       (identifier)
       (call_expression
-        (field_access_expression
+        (field_expression
           (array_expression
             (number_literal)
             (number_literal))
@@ -152,9 +152,9 @@ you need it to be mutable #}
         (arguments))))
   (render_expression
     (call_expression
-      (field_access_expression
+      (field_expression
         (call_expression
-          (field_access_expression
+          (field_expression
             (identifier)
             (field_identifier))
           (arguments))
@@ -291,15 +291,15 @@ calling_functions
   (comment)
   (render_expression
     (call_expression
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))
       (arguments)))
   (comment)
   (render_expression
     (call_expression
-      (path_expression
-        (path_expression
+      (scoped_identifier
+        (scoped_identifier
           (identifier)
           (identifier))
         (identifier))
@@ -439,7 +439,7 @@ for_1
   (content)
   (render_expression
     (filter_expression
-      (field_access_expression
+      (field_expression
         (identifier)
         (field_identifier))
       (identifier)))
@@ -473,12 +473,12 @@ for_2
       (identifier)))
   (control_tag
     (if_statement
-      (field_access_expression
+      (field_expression
         (identifier)
         (field_identifier))))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)
@@ -486,12 +486,12 @@ for_2
     (else_statement))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)
@@ -522,7 +522,7 @@ if
     (if_statement
       (binary_expression
         (call_expression
-          (field_access_expression
+          (field_expression
             (identifier)
             (field_identifier))
           (arguments))
@@ -532,7 +532,7 @@ if
     (else_if_statement
       (binary_expression
         (call_expression
-          (field_access_expression
+          (field_expression
             (identifier)
             (field_identifier))
           (arguments))
@@ -542,7 +542,7 @@ if
     (else_if_statement
       (binary_expression
         (call_expression
-          (field_access_expression
+          (field_expression
             (identifier)
             (field_identifier))
           (arguments))
@@ -552,7 +552,7 @@ if
     (else_statement))
   (render_expression
     (call_expression
-      (field_access_expression
+      (field_expression
         (identifier)
         (field_identifier))
       (arguments)))
@@ -582,7 +582,7 @@ if_let
           (identifier))
         (identifier))))
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (control_tag
@@ -786,9 +786,9 @@ match_4
       (identifier)))
   (control_tag
     (when_statement
-      (array_pattern
+      (slice_pattern
         (identifier)
-        (wildcard))))
+        (remaining_field))))
   (content)
   (render_expression
     (identifier))
@@ -1225,7 +1225,7 @@ imports_and_scopes
       (identifier)))
   (render_expression
     (call_expression
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))
       (arguments
@@ -1598,7 +1598,7 @@ macro_call_block_args
       (identifier)))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)
@@ -1623,12 +1623,12 @@ macro_call_block_args
           (identifier)))))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)
   (render_expression
-    (field_access_expression
+    (field_expression
       (identifier)
       (field_identifier)))
   (content)

@@ -111,7 +111,7 @@ _layout
     (if_statement
       (binary_expression
         (identifier)
-        (path_expression
+        (scoped_identifier
           (identifier)
           (identifier)))))
   (content)
@@ -127,7 +127,7 @@ _layout
     (if_statement
       (binary_expression
         (identifier)
-        (path_expression
+        (scoped_identifier
           (identifier)
           (identifier)))))
   (content)
@@ -143,7 +143,7 @@ _layout
     (if_statement
       (binary_expression
         (identifier)
-        (path_expression
+        (scoped_identifier
           (identifier)
           (identifier)))))
   (content)
@@ -205,7 +205,7 @@ error
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -225,7 +225,7 @@ error
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -240,13 +240,13 @@ error
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (control_tag
     (when_statement
       (tuple_struct_pattern
-        (path_expression
+        (scoped_identifier
           (identifier)
           (identifier))
         (identifier))))
@@ -323,7 +323,7 @@ greet
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -332,7 +332,7 @@ greet
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -341,7 +341,7 @@ greet
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -361,19 +361,19 @@ greet
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -385,7 +385,7 @@ greet
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -396,7 +396,7 @@ greet
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -407,7 +407,7 @@ greet
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -432,19 +432,19 @@ greet
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -574,19 +574,19 @@ index
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -603,77 +603,19 @@ index
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (control_tag
-    (endmatch_statement))
-  (content)
-  (render_expression
-    (identifier))
-  (content)
-  (comment)
-  (control_tag
-    (match_statement
-      (identifier)))
-  (control_tag
-    (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (comment)
-  (content)
-  (control_tag
-    (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (comment)
-  (content)
-  (control_tag
-    (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (comment)
-  (content)
-  (control_tag
-    (endmatch_statement))
-  (content)
-  (control_tag
-    (match_statement
-      (identifier)))
-  (control_tag
-    (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (control_tag
-    (when_statement
-      (path_expression
-        (identifier)
-        (identifier))))
-  (content)
-  (control_tag
-    (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
@@ -683,24 +625,82 @@ index
   (render_expression
     (identifier))
   (content)
+  (comment)
   (control_tag
     (match_statement
       (identifier)))
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (comment)
+  (content)
+  (control_tag
+    (when_statement
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (comment)
+  (content)
+  (control_tag
+    (when_statement
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (comment)
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)
   (control_tag
     (when_statement
-      (path_expression
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (when_statement
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (content)
+  (control_tag
+    (when_statement
+      (scoped_identifier
         (identifier)
         (identifier))))
   (content)

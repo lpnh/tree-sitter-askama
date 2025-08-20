@@ -36,7 +36,7 @@ module.exports = grammar({
     source: $ =>
       repeat(choice($.control_tag, $.render_expression, $.comment, $.content)),
 
-    content: $ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
+    content: _ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
 
     comment: $ => seq('{#', $._nested_comment, '#}'),
     _nested_comment: $ => $._nested_comment_token,
@@ -66,6 +66,8 @@ module.exports = grammar({
         $.import_statement,
         $.let_statement,
         $.for_statement,
+        $.break_statement,
+        $.continue_statement,
         $.endfor_statement,
         $._conditional_statement,
         $.match_statement,
@@ -115,6 +117,10 @@ module.exports = grammar({
         field('value', $._expression),
       ),
 
+    break_statement: _ => 'break',
+
+    continue_statement: _ => 'continue',
+
     endfor_statement: _ => 'endfor',
 
     _conditional_statement: $ =>
@@ -149,40 +155,37 @@ module.exports = grammar({
 
     when_statement: $ => seq('when', field('pattern', $._match_pattern)),
 
-    _match_pattern: $ => choice($._pattern, $.or_pattern, $.with_pattern),
+    _match_pattern: $ =>
+      seq(
+        choice($._pattern, $.or_pattern, $.with_pattern),
+        // optional(seq('if', field('condition', $._expression))),
+      ),
 
     endwhen_statement: _ => 'endwhen',
 
     _pattern: $ =>
       choice(
-        $._identifier_pattern,
-        $._literal_pattern,
-        $.tuple_struct_pattern,
-        $.array_pattern,
+        $._literal,
+        $.identifier,
+        $.scoped_identifier,
         $.tuple_pattern,
-        $.path_expression,
-        $.macro_invocation,
+        $.tuple_struct_pattern,
+        $.slice_pattern,
+        $.remaining_field,
         $.placeholder,
       ),
 
-    _identifier_pattern: $ => $.identifier,
-
-    _literal_pattern: $ =>
-      choice($.string_literal, $.number_literal, $.boolean_literal),
+    tuple_pattern: $ => seq('(', _list($._pattern), ')'),
 
     tuple_struct_pattern: $ =>
       seq(
-        field('type', choice($.identifier, $.path_expression)),
+        field('type', choice($.identifier, $.scoped_identifier)),
         '(',
         optional(_list($._pattern)),
         ')',
       ),
 
-    array_pattern: $ =>
-      seq('[', optional(_list(choice($._pattern, $.wildcard))), ']'),
-
-    tuple_pattern: $ =>
-      seq('(', optional(_list(choice($._pattern, $.wildcard))), ')'),
+    slice_pattern: $ => seq('[', optional(_list($._pattern)), ']'),
 
     or_pattern: $ => seq($._pattern, '|', sepBy1($._pattern, '|')),
 
@@ -203,9 +206,9 @@ module.exports = grammar({
         $.placeholder,
       ),
 
-    placeholder: $ => '_',
+    placeholder: _ => '_',
 
-    wildcard: $ => '..',
+    remaining_field: _ => '..',
 
     macro_statement: $ =>
       seq(
@@ -239,17 +242,18 @@ module.exports = grammar({
         $.reference_expression,
         $.binary_expression,
         $.call_expression,
-        $.path_expression,
-        $.field_access_expression,
+        $._literal,
+        $.identifier,
+        $.scoped_identifier,
+        $.field_expression,
         $.array_expression,
         $.tuple_expression,
-        $.parenthesized_expression,
-        prec(1, $.macro_invocation),
+        $.macro_invocation,
         $.index_expression,
-        $.filter_expression,
+        $.parenthesized_expression,
         $.is_defined_expression,
+        $.filter_expression,
         $.string_concatenation,
-        $._primary_expression,
       ),
 
     binary_expression: $ => {
@@ -284,7 +288,7 @@ module.exports = grammar({
       seq($.identifier, repeat1(seq('~', $.identifier))),
 
     is_defined_expression: $ =>
-      seq($._primary_expression, seq(choice('is', 'is not'), 'defined')),
+      seq($.identifier, seq(choice('is', 'is not'), 'defined')),
 
     filter_expression: $ =>
       prec.left(
@@ -301,10 +305,27 @@ module.exports = grammar({
       ),
 
     macro_invocation: $ =>
+      prec(
+        1,
+        seq(
+          field('macro', choice($.identifier, $.scoped_identifier)),
+          '!',
+          $.token_tree,
+        ),
+      ),
+
+    token_tree: $ =>
       seq(
-        field('macro', choice($.identifier, $.path_expression)),
-        '!',
-        alias($.arguments, $.token_tree),
+        '(',
+        optional(
+          _list(
+            seq(
+              $._expression,
+              optional(seq('if', field('condition', $._expression))),
+            ),
+          ),
+        ),
+        ')',
       ),
 
     call_expression: $ =>
@@ -316,7 +337,7 @@ module.exports = grammar({
         ),
       ),
 
-    field_access_expression: $ =>
+    field_expression: $ =>
       prec.left(
         PREC.field,
         seq(
@@ -352,31 +373,21 @@ module.exports = grammar({
     named_argument: $ =>
       seq(field('name', $.identifier), '=', field('value', $._expression)),
 
-    path_expression: $ =>
+    scoped_identifier: $ =>
       seq(
         field('path', optional($._path)),
         '::',
         field('name', choice($.identifier)),
       ),
 
-    _path: $ => choice($.identifier, $.path_expression),
+    _path: $ => choice($.identifier, $.scoped_identifier),
 
     parenthesized_expression: $ => seq('(', $._expression, ')'),
 
     tuple_expression: $ =>
-      seq(
-        '(',
-        field('first', $._expression),
-        ',',
-        optional(field('rest', sepBy1($._expression, ','))),
-        optional(','),
-        ')',
-      ),
+      seq('(', $._expression, ',', optional(_list($._expression)), ')'),
 
-    array_expression: $ =>
-      seq('[', optional(field('elements', _list($._expression))), ']'),
-
-    _primary_expression: $ => choice($._literal, $.identifier),
+    array_expression: $ => seq('[', optional(_list($._expression)), ']'),
 
     _literal: $ =>
       choice(
