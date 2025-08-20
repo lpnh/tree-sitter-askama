@@ -188,15 +188,20 @@
 (macro_invocation
   "!" @constant.macro)
 
-(call_expression
-  function: (identifier) @constant.builtin
-  (#any-of? @constant.builtin "caller"))
-
 ((identifier) @constant.builtin
   (#any-of? @constant.builtin "Some" "None" "Ok" "Err"))
 
 ((identifier) @module
   (#any-of? @module "crate" "super" "self"))
+
+; Builtin
+(call_expression
+  function: (identifier) @constant.builtin
+  (#any-of? @constant.builtin "caller"))
+
+(call_expression
+  function: (identifier) @constant.macro
+  (#any-of? @constant.macro "super" ))
 
 ; Filter names
 (filter
