@@ -194,6 +194,11 @@
   (#any-of? @module "crate" "super" "self"))
 
 ; Builtin
+(field_expression
+  (identifier) @constant.builtin
+  (field_identifier) @constant.builtin
+  (#any-of? @constant.builtin "loop"))
+
 (call_expression
   function: (identifier) @constant.builtin
   (#any-of? @constant.builtin "caller"))
