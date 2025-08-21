@@ -310,22 +310,8 @@ module.exports = grammar({
         seq(
           field('macro', choice($.identifier, $.scoped_identifier)),
           '!',
-          $.token_tree,
+          alias($.arguments, $.token_tree),
         ),
-      ),
-
-    token_tree: $ =>
-      seq(
-        '(',
-        optional(
-          _list(
-            seq(
-              $._expression,
-              optional(seq('if', field('condition', $._expression))),
-            ),
-          ),
-        ),
-        ')',
       ),
 
     call_expression: $ =>

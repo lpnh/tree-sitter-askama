@@ -2528,94 +2528,7 @@
   {
     "type": "token_tree",
     "named": true,
-    "fields": {
-      "condition": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "-",
-            "named": false
-          },
-          {
-            "type": "array_expression",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "boolean_literal",
-            "named": true
-          },
-          {
-            "type": "call_expression",
-            "named": true
-          },
-          {
-            "type": "field_expression",
-            "named": true
-          },
-          {
-            "type": "filter_expression",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "index_expression",
-            "named": true
-          },
-          {
-            "type": "is_defined_expression",
-            "named": true
-          },
-          {
-            "type": "macro_invocation",
-            "named": true
-          },
-          {
-            "type": "number_literal",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "range_expression",
-            "named": true
-          },
-          {
-            "type": "reference_expression",
-            "named": true
-          },
-          {
-            "type": "scoped_identifier",
-            "named": true
-          },
-          {
-            "type": "string_concatenation",
-            "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
-          },
-          {
-            "type": "tuple_expression",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
@@ -2658,6 +2571,10 @@
         },
         {
           "type": "macro_invocation",
+          "named": true
+        },
+        {
+          "type": "named_argument",
           "named": true
         },
         {
