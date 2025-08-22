@@ -1383,6 +1383,45 @@ match-no-ws
   (content))
 
 ================================================================================
+match-opt-bool
+================================================================================
+
+{% match item %}
+{% when Some with (true) %}
+Found Some(true)
+{% when Some with (false) %}
+Found Some(false)
+{% when None %}
+Not Found
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (with_pattern
+        (identifier)
+        (boolean_literal))))
+  (content)
+  (control_tag
+    (when_statement
+      (with_pattern
+        (identifier)
+        (boolean_literal))))
+  (content)
+  (control_tag
+    (when_statement
+      (identifier)))
+  (content)
+  (control_tag
+    (endmatch_statement))
+  (content))
+
+================================================================================
 match-opt
 ================================================================================
 
@@ -1535,6 +1574,169 @@ named-end
   (control_tag
     (endblock_statement
       (identifier)))
+  (content))
+
+================================================================================
+operators
+================================================================================
+
+{% if a * c > b -%}
+  mul
+{%- endif -%}
+{% if c / c == a -%}
+  div
+{%- endif -%}
+{% if a % c == b -%}
+  mod
+{%- endif -%}
+{% if a + b == c -%}
+  add
+{%- endif -%}
+{% if a << b == c -%}
+  rsh
+{%- endif -%}
+{% if c >> b == a -%}
+  lsh
+{%- endif -%}
+{% if a bitand b == b -%}
+  band
+{%- endif -%}
+{% if b xor c == a + c -%}
+  bxor
+{%- endif -%}
+{% if b bitor c == a + c -%}
+  bor
+{%- endif -%}
+{% if a == b && a + b == c -%}
+  and
+{%- endif -%}
+{% if a == c || a == 1 -%}
+  or
+{%- endif -%}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (binary_expression
+          (identifier)
+          (identifier)))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (binary_expression
+          (identifier)
+          (identifier)))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (binary_expression
+          (binary_expression
+            (identifier)
+            (identifier))
+          (identifier)))))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (if_statement
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (identifier))
+        (binary_expression
+          (identifier)
+          (number_literal)))))
+  (content)
+  (control_tag
+    (endif_statement))
   (content))
 
 ================================================================================

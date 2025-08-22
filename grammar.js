@@ -8,13 +8,14 @@
 // @ts-check
 
 const PREC = {
-  calls: 14,
-  macro_calls: 13,
-  field: 12,
-  unary: 11,
-  filter: 10,
-  multiplicative: 9,
-  additive: 8,
+  calls: 15,
+  macro_calls: 14,
+  field: 13,
+  unary: 12,
+  filter: 11,
+  multiplicative: 10,
+  additive: 9,
+  shift: 8,
   bitand: 7,
   xor: 6,
   bitor: 5,
@@ -287,6 +288,7 @@ module.exports = grammar({
         [PREC.xor, 'xor'],
         [PREC.bitor, 'bitor'],
         [PREC.bitand, 'bitand'],
+        [PREC.shift, choice('<<', '>>')],
         [PREC.additive, choice('+', '-')],
         [PREC.multiplicative, choice('*', '/', '%')],
       ]
