@@ -119,6 +119,8 @@
   "endmacro"
   "call"
   (endcall_statement)
+  (raw_statement)
+  (endraw_statement)
 ] @keyword
 
 [

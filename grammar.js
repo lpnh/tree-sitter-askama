@@ -30,16 +30,39 @@ module.exports = grammar({
 
   extras: _ => [/\s/],
 
-  externals: $ => [$._nested_comment_token],
+  externals: $ => [$._nested_comment, $.raw_content],
 
   rules: {
     source: $ =>
-      repeat(choice($.control_tag, $.render_expression, $.comment, $.content)),
+      repeat(
+        choice(
+          $.control_tag,
+          $.render_expression,
+          $._raw_block,
+          $.comment,
+          $.content,
+        ),
+      ),
 
     content: _ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
 
     comment: $ => seq('{#', $._nested_comment, '#}'),
-    _nested_comment: $ => $._nested_comment_token,
+
+    _raw_block: $ => seq($.raw_statement, $.raw_content, $.endraw_statement),
+
+    raw_statement: _ =>
+      seq(
+        choice('{%', '{%-', '{%+', '{%~'),
+        'raw',
+        choice('%}', '-%}', '+%}', '~%}'),
+      ),
+
+    endraw_statement: _ =>
+      seq(
+        choice('{%', '{%-', '{%+', '{%~'),
+        'endraw',
+        choice('%}', '-%}', '+%}', '~%}'),
+      ),
 
     control_tag: $ =>
       seq(

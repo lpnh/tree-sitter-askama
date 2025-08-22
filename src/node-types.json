@@ -781,6 +781,11 @@
     }
   },
   {
+    "type": "endraw_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "extends_statement",
     "named": true,
     "fields": {},
@@ -2218,6 +2223,11 @@
     }
   },
   {
+    "type": "raw_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "reference_expression",
     "named": true,
     "fields": {
@@ -2501,6 +2511,18 @@
         },
         {
           "type": "control_tag",
+          "named": true
+        },
+        {
+          "type": "endraw_statement",
+          "named": true
+        },
+        {
+          "type": "raw_content",
+          "named": true
+        },
+        {
+          "type": "raw_statement",
           "named": true
         },
         {
@@ -3219,6 +3241,10 @@
     "named": true
   },
   {
+    "type": "endraw",
+    "named": false
+  },
+  {
     "type": "endwhen_statement",
     "named": true
   },
@@ -3292,6 +3318,14 @@
   },
   {
     "type": "placeholder",
+    "named": true
+  },
+  {
+    "type": "raw",
+    "named": false
+  },
+  {
+    "type": "raw_content",
     "named": true
   },
   {

@@ -17,6 +17,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "_raw_block"
+          },
+          {
+            "type": "SYMBOL",
             "name": "comment"
           },
           {
@@ -54,9 +58,124 @@
         }
       ]
     },
-    "_nested_comment": {
-      "type": "SYMBOL",
-      "name": "_nested_comment_token"
+    "_raw_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "raw_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "raw_content"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "endraw_statement"
+        }
+      ]
+    },
+    "raw_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "{%"
+            },
+            {
+              "type": "STRING",
+              "value": "{%-"
+            },
+            {
+              "type": "STRING",
+              "value": "{%+"
+            },
+            {
+              "type": "STRING",
+              "value": "{%~"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "raw"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "%}"
+            },
+            {
+              "type": "STRING",
+              "value": "-%}"
+            },
+            {
+              "type": "STRING",
+              "value": "+%}"
+            },
+            {
+              "type": "STRING",
+              "value": "~%}"
+            }
+          ]
+        }
+      ]
+    },
+    "endraw_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "{%"
+            },
+            {
+              "type": "STRING",
+              "value": "{%-"
+            },
+            {
+              "type": "STRING",
+              "value": "{%+"
+            },
+            {
+              "type": "STRING",
+              "value": "{%~"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "endraw"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "%}"
+            },
+            {
+              "type": "STRING",
+              "value": "-%}"
+            },
+            {
+              "type": "STRING",
+              "value": "+%}"
+            },
+            {
+              "type": "STRING",
+              "value": "~%}"
+            }
+          ]
+        }
+      ]
     },
     "control_tag": {
       "type": "SEQ",
@@ -2340,7 +2459,11 @@
   "externals": [
     {
       "type": "SYMBOL",
-      "name": "_nested_comment_token"
+      "name": "_nested_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "raw_content"
     }
   ],
   "inline": [],
