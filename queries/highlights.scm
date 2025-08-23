@@ -124,21 +124,21 @@
   "endmacro"
   "call"
   (endcall_statement)
-  (raw_statement)
-  (endraw_statement)
+  "raw"
+  "endraw"
 ] @keyword
 
 [
-  "extends"
-  "include"
-  "import"
   "as"
+  "extends"
+  "import"
+  "include"
 ] @keyword.import
 
 [
   "let"
-  "set"
   "mut"
+  "set"
 ] @keyword
 
 ; Delimiters
@@ -202,9 +202,9 @@
 
 ; Builtin
 (field_expression
-  (identifier) @constant.builtin
-  (field_identifier) @constant.builtin
-  (#eq? @constant.builtin "loop"))
+  value: (identifier) @constant.builtin
+  field: (field_identifier) @constant.builtin
+  (#any-of? @constant.builtin "loop"))
 
 (call_expression
   function: (identifier) @constant.builtin
