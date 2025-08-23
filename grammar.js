@@ -27,6 +27,23 @@ const PREC = {
   content: -1,
 }
 
+const numericTypes = [
+  'u8',
+  'i8',
+  'u16',
+  'i16',
+  'u32',
+  'i32',
+  'u64',
+  'i64',
+  'u128',
+  'i128',
+  'isize',
+  'usize',
+  'f32',
+  'f64',
+]
+
 module.exports = grammar({
   name: 'askama',
 
@@ -425,7 +442,31 @@ module.exports = grammar({
 
     _negative_literal: $ => seq('-', $.number_literal),
 
-    number_literal: _ => token(/\d+(\.\d+)?([eE][+-]?\d+)?/),
+    number_literal: $ => choice($._integer_literal, $._float_literal),
+
+    _integer_literal: _ =>
+      token(
+        seq(
+          choice(/[0-9][0-9_]*/, /0x[0-9a-fA-F_]+/, /0b[01_]+/, /0o[0-7_]+/),
+          optional(choice(...numericTypes)),
+        ),
+      ),
+
+    _float_literal: _ =>
+      token(
+        seq(
+          choice(
+            seq(
+              /[0-9][0-9_]*/,
+              '.',
+              /[0-9_]+/,
+              optional(seq(/[eE]/, optional(/[+-]/), /[0-9_]+/)),
+            ),
+            seq(/[0-9][0-9_]*/, /[eE]/, optional(/[+-]/), /[0-9_]+/),
+          ),
+          optional(/f(32|64)/),
+        ),
+      ),
 
     boolean_literal: _ => choice('true', 'false'),
 

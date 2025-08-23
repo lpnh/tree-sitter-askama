@@ -2160,6 +2160,11 @@
     }
   },
   {
+    "type": "number_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "or_pattern",
     "named": true,
     "fields": {},
@@ -3762,10 +3767,6 @@
   {
     "type": "mut",
     "named": false
-  },
-  {
-    "type": "number_literal",
-    "named": true
   },
   {
     "type": "placeholder",
