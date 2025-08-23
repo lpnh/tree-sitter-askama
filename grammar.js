@@ -140,6 +140,7 @@ module.exports = grammar({
         field('pattern', $._pattern),
         'in',
         field('value', $._expression),
+        optional(field('filter', $.if_statement)),
       ),
 
     break_statement: _ => 'break',

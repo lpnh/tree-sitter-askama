@@ -424,7 +424,7 @@ for_1
 <h1>Users</h1>
 <ul>
 {% for user in users %}
-  <li>{{ user.name|e }}</li>
+  <li>{{ user.name }}</li>
 {% endfor %}
 </ul>
 
@@ -438,11 +438,9 @@ for_1
       (identifier)))
   (content)
   (render_expression
-    (filter_expression
-      (field_expression
-        (identifier)
-        (field_identifier))
-      (identifier)))
+    (field_expression
+      (identifier)
+      (field_identifier)))
   (content)
   (control_tag
     (endfor_statement))
@@ -450,6 +448,73 @@ for_1
 
 ================================================================================
 for_2
+================================================================================
+
+<h1>Users</h1>
+<ul>
+{% for user in users if user.is_activated %}
+  <li>{{ user.name }}</li>
+{% endfor %}
+</ul>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)
+      (if_statement
+        (field_expression
+          (identifier)
+          (field_identifier)))))
+  (content)
+  (render_expression
+    (field_expression
+      (identifier)
+      (field_identifier)))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
+
+================================================================================
+for_3
+================================================================================
+
+<h1>Users</h1>
+<ul>
+{% for user in users %}
+  <li>{{ user.name }}</li>
+{% else %}
+  <li>No users</li>
+{% endfor %}
+</ul>
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (for_statement
+      (identifier)
+      (identifier)))
+  (content)
+  (render_expression
+    (field_expression
+      (identifier)
+      (field_identifier)))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (control_tag
+    (endfor_statement))
+  (content))
+
+================================================================================
+for_4
 ================================================================================
 
 <h1>Users</h1>

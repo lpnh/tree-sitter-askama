@@ -1088,6 +1088,16 @@
     "type": "for_statement",
     "named": true,
     "fields": {
+      "filter": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "if_statement",
+            "named": true
+          }
+        ]
+      },
       "pattern": {
         "multiple": true,
         "required": true,
