@@ -1189,6 +1189,62 @@ let
   (content))
 
 ================================================================================
+literals-escape
+================================================================================
+
+{{ '\x41' }}{{ '\n' }}{{ '\r' }}{{ '\t' }}{{ '\\' }}{{ '\0' }}{{ '\u{2665}' }}{{ '\'' }}{{ '\"' }}{{ '"' }}
+{{ "\x41\n\r\t\\\0\u{2665}\'\"'" }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (char_literal))
+  (render_expression
+    (string_literal))
+  (content))
+
+================================================================================
+literals
+================================================================================
+
+{{ 'a' }}
+{{ "a" }}
+{{ true }}
+{{ false }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (render_expression
+    (char_literal))
+  (render_expression
+    (string_literal))
+  (render_expression
+    (boolean_literal))
+  (render_expression
+    (boolean_literal))
+  (content))
+
+================================================================================
 macro
 ================================================================================
 
@@ -1352,6 +1408,42 @@ macro-with-caller
     (endcall_statement))
   (control_tag
     (endmacro_statement))
+  (content))
+
+================================================================================
+match-literal-char
+================================================================================
+
+{% match item %}
+{% when 'a' %}
+Found literal a
+{% when 'b' %}
+Found literal b
+{% else %}
+Else found {{item}}
+{% endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (char_literal)))
+  (content)
+  (control_tag
+    (when_statement
+      (char_literal)))
+  (content)
+  (control_tag
+    (else_statement))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endmatch_statement))
   (content))
 
 ================================================================================

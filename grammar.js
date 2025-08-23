@@ -417,6 +417,7 @@ module.exports = grammar({
     _literal: $ =>
       choice(
         $.string_literal,
+        $.char_literal,
         $.boolean_literal,
         $.number_literal,
         $._negative_literal,
@@ -429,6 +430,29 @@ module.exports = grammar({
     boolean_literal: _ => choice('true', 'false'),
 
     string_literal: _ => token(/"([^"\\]|\\.)*"/),
+
+    char_literal: _ =>
+      token(
+        seq(
+          optional('b'),
+          "'",
+          optional(
+            choice(
+              seq(
+                '\\',
+                choice(
+                  /[^xu]/,
+                  /u[0-9a-fA-F]{4}/,
+                  /u\{[0-9a-fA-F]+\}/,
+                  /x[0-9a-fA-F]{2}/,
+                ),
+              ),
+              /[^\\']/,
+            ),
+          ),
+          "'",
+        ),
+      ),
 
     identifier: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
