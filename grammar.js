@@ -8,9 +8,10 @@
 // @ts-check
 
 const PREC = {
-  calls: 15,
-  macro_calls: 14,
-  field: 13,
+  calls: 16,
+  macro_calls: 15,
+  field: 14,
+  try: 13,
   unary: 12,
   filter: 11,
   multiplicative: 10,
@@ -273,6 +274,7 @@ module.exports = grammar({
       choice(
         $.unary_expression,
         $.reference_expression,
+        $.try_expression,
         $.binary_expression,
         $.call_expression,
         $._literal,
@@ -383,6 +385,8 @@ module.exports = grammar({
 
     unary_expression: $ =>
       prec(PREC.unary, seq(choice('*', '!'), $._expression)),
+
+    try_expression: $ => prec(PREC.try, seq($._expression, '?')),
 
     reference_expression: $ =>
       prec(PREC.unary, seq('&', field('value', $._expression))),

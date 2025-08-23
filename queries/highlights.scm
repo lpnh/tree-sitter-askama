@@ -75,6 +75,7 @@
   ">"
   ">="
   ">>"
+  "?"
   "bitand"
   "bitor"
   "xor"
@@ -203,15 +204,15 @@
 (field_expression
   (identifier) @constant.builtin
   (field_identifier) @constant.builtin
-  (#any-of? @constant.builtin "loop"))
+  (#eq? @constant.builtin "loop"))
 
 (call_expression
   function: (identifier) @constant.builtin
-  (#any-of? @constant.builtin "caller"))
+  (#eq? @constant.builtin "caller"))
 
 (call_expression
   function: (identifier) @constant.macro
-  (#any-of? @constant.macro "super" ))
+  (#eq? @constant.macro "super" ))
 
 ; Filter names
 (filter_expression

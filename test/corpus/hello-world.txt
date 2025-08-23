@@ -1,0 +1,24 @@
+================================================================================
+hello-world
+================================================================================
+
+Hello {%- if let Some(user) = user? -%} , {{ user }} {%- endif -%}!
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (if_statement
+      (let_condition
+        (tuple_struct_pattern
+          (identifier)
+          (identifier))
+        (try_expression
+          (identifier)))))
+  (content)
+  (render_expression
+    (identifier))
+  (control_tag
+    (endif_statement))
+  (content))
