@@ -1097,6 +1097,10 @@
             "named": true
           },
           {
+            "type": "struct_pattern",
+            "named": true
+          },
+          {
             "type": "tuple_pattern",
             "named": true
           },
@@ -1478,6 +1482,10 @@
             "named": true
           },
           {
+            "type": "struct_pattern",
+            "named": true
+          },
+          {
             "type": "tuple_pattern",
             "named": true
           },
@@ -1617,6 +1625,10 @@
           },
           {
             "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_pattern",
             "named": true
           },
           {
@@ -2043,6 +2055,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_pattern",
           "named": true
         },
         {
@@ -2490,6 +2506,10 @@
           "named": true
         },
         {
+          "type": "struct_pattern",
+          "named": true
+        },
+        {
           "type": "tuple_pattern",
           "named": true
         },
@@ -2550,6 +2570,76 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "struct_pattern",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "scoped_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "placeholder",
+          "named": true
+        },
+        {
+          "type": "remaining_field",
+          "named": true
+        },
+        {
+          "type": "scoped_identifier",
+          "named": true
+        },
+        {
+          "type": "slice_pattern",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_pattern",
+          "named": true
+        },
+        {
+          "type": "tuple_pattern",
+          "named": true
+        },
+        {
+          "type": "tuple_struct_pattern",
           "named": true
         }
       ]
@@ -2774,6 +2864,10 @@
           "named": true
         },
         {
+          "type": "struct_pattern",
+          "named": true
+        },
+        {
           "type": "tuple_pattern",
           "named": true
         },
@@ -2837,6 +2931,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_pattern",
           "named": true
         },
         {
@@ -2986,6 +3084,10 @@
             "named": true
           },
           {
+            "type": "struct_pattern",
+            "named": true
+          },
+          {
             "type": "tuple_pattern",
             "named": true
           },
@@ -3039,6 +3141,10 @@
         },
         {
           "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "struct_pattern",
           "named": true
         },
         {
@@ -3369,6 +3475,10 @@
     "named": false
   },
   {
+    "type": "{",
+    "named": false
+  },
+  {
     "type": "{#",
     "named": false
   },
@@ -3410,6 +3520,10 @@
   },
   {
     "type": "||",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   },
   {

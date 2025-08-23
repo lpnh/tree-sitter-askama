@@ -1061,6 +1061,34 @@ html-base
   (content))
 
 ================================================================================
+if-let-struct
+================================================================================
+
+{% if let Digits { one, two, three } = digits %}{{ one }} {{ two }} {{ three }}{% endif %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (if_statement
+      (let_condition
+        (struct_pattern
+          (identifier)
+          (identifier)
+          (identifier)
+          (identifier))
+        (identifier))))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (render_expression
+    (identifier))
+  (control_tag
+    (endif_statement))
+  (content))
+
+================================================================================
 if
 ================================================================================
 

@@ -50,6 +50,8 @@
   ")"
   "["
   "]"
+  "{"
+  "}"
 ] @punctuation.bracket
 
 ; Operators

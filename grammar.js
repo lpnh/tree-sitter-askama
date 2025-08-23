@@ -194,6 +194,7 @@ module.exports = grammar({
         $.scoped_identifier,
         $.tuple_pattern,
         $.tuple_struct_pattern,
+        $.struct_pattern,
         $.slice_pattern,
         $.remaining_field,
         $.placeholder,
@@ -207,6 +208,14 @@ module.exports = grammar({
         '(',
         optional(_list($._pattern)),
         ')',
+      ),
+
+    struct_pattern: $ =>
+      seq(
+        field('type', choice($.identifier, $.scoped_identifier)),
+        '{',
+        _list($._pattern),
+        '}',
       ),
 
     slice_pattern: $ => seq('[', optional(_list($._pattern)), ']'),
