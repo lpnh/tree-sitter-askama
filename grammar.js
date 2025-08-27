@@ -25,7 +25,7 @@ const PREC = {
   or: 2,
   range: 1,
   content: -1,
-}
+};
 
 const numericTypes = [
   'u8',
@@ -42,7 +42,7 @@ const numericTypes = [
   'usize',
   'f32',
   'f64',
-]
+];
 
 module.exports = grammar({
   name: 'askama',
@@ -320,7 +320,7 @@ module.exports = grammar({
         [PREC.shift, choice('<<', '>>')],
         [PREC.additive, choice('+', '-')],
         [PREC.multiplicative, choice('*', '/', '%')],
-      ]
+      ];
 
       return choice(
         ...table.map(([precedence, operator]) =>
@@ -335,7 +335,7 @@ module.exports = grammar({
             ),
           ),
         ),
-      )
+      );
     },
 
     string_concatenation: $ =>
@@ -476,7 +476,7 @@ module.exports = grammar({
       token(
         seq(
           optional('b'),
-          "'",
+          '\'',
           optional(
             choice(
               seq(
@@ -491,7 +491,7 @@ module.exports = grammar({
               /[^\\']/,
             ),
           ),
-          "'",
+          '\'',
         ),
       ),
 
@@ -499,21 +499,23 @@ module.exports = grammar({
 
     _field_identifier: $ => alias($.identifier, $.field_identifier),
   },
-})
+});
 
 /**
  * Match one or more occurrences separated by a delimiter
+ *
  * @param {RuleOrLiteral} rule - The rule to repeat
  * @param {RuleOrLiteral} separator - The separator
  */
 function sepBy1(rule, separator) {
-  return seq(rule, repeat(seq(separator, rule)))
+  return seq(rule, repeat(seq(separator, rule)));
 }
 
 /**
  * Match a comma-separated list with optional trailing comma
+ *
  * @param {RuleOrLiteral} rule - The rule for list items
  */
 function _list(rule) {
-  return seq(sepBy1(rule, ','), optional(','))
+  return seq(sepBy1(rule, ','), optional(','));
 }
