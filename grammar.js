@@ -239,7 +239,8 @@ module.exports = grammar({
 
     slice_pattern: $ => seq('[', optional(_list($._pattern)), ']'),
 
-    or_pattern: $ => seq($._pattern, '|', sepBy1($._pattern, '|')),
+    or_pattern: $ =>
+      seq($._pattern, choice('|', 'or'), sepBy1($._pattern, '|')),
 
     with_pattern: $ => seq($._pattern, 'with', $._pattern_destructure),
 

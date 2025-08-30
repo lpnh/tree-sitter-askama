@@ -1161,6 +1161,111 @@ let-destruct-tuple
   (content))
 
 ================================================================================
+let-shadow
+================================================================================
+
+{%- let a = 1 -%}
+{%- let b -%}
+
+{%- if cond -%}
+    {%- let b = 22 -%}
+    {{ b }}-
+
+    {%- let b = 33 -%}
+    {{ a }}-{{ b }}-
+{%- else -%}
+    {%- let b = 222 -%}
+    {{ b }}-
+
+    {%- let b = 333 -%}
+    {{ a }}-{{ b }}-
+
+    {%- let (a, b) = Self::tuple() -%}
+    {{ a }}-{{ b }}-
+{%- endif -%}
+
+{%- let a = 11 -%}
+{{ a }}-{{ b }}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (control_tag
+    (let_statement
+      (identifier)))
+  (control_tag
+    (if_statement
+      (identifier)))
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (else_statement))
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (let_statement
+      (tuple_pattern
+        (identifier)
+        (identifier))
+      (call_expression
+        (scoped_identifier
+          (identifier)
+          (identifier))
+        (arguments))))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content)
+  (control_tag
+    (endif_statement))
+  (control_tag
+    (let_statement
+      (identifier)
+      (number_literal)))
+  (render_expression
+    (identifier))
+  (content)
+  (render_expression
+    (identifier))
+  (content))
+
+================================================================================
 let
 ================================================================================
 
@@ -1408,6 +1513,51 @@ macro-with-caller
     (endcall_statement))
   (control_tag
     (endmacro_statement))
+  (content))
+
+================================================================================
+match-enum-or
+================================================================================
+
+The card is
+{%- match suit %}
+   {%- when Suit::Clubs or Suit::Spades -%}
+     {{ " black" }}
+   {%- when Suit::Diamonds or Suit::Hearts -%}
+     {{ " red" }}
+{%- endmatch %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (content)
+  (control_tag
+    (match_statement
+      (identifier)))
+  (control_tag
+    (when_statement
+      (or_pattern
+        (scoped_identifier
+          (identifier)
+          (identifier))
+        (scoped_identifier
+          (identifier)
+          (identifier)))))
+  (render_expression
+    (string_literal))
+  (control_tag
+    (when_statement
+      (or_pattern
+        (scoped_identifier
+          (identifier)
+          (identifier))
+        (scoped_identifier
+          (identifier)
+          (identifier)))))
+  (render_expression
+    (string_literal))
+  (control_tag
+    (endmatch_statement))
   (content))
 
 ================================================================================
