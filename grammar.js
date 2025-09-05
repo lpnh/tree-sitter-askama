@@ -65,7 +65,12 @@ module.exports = grammar({
 
     content: _ => token(prec(PREC.content, /[^{]+|\{[^{#%]/)),
 
-    comment: $ => seq('{#', $._nested_comment, '#}'),
+    comment: $ =>
+      seq(
+        choice('{#', '{#-', '{#+', '{#~'),
+        $._nested_comment,
+        choice('#}', '-#}', '+#}', '~#}'),
+      ),
 
     _raw_block: $ => seq($.raw_statement, $.raw_content, $.endraw_statement),
 
