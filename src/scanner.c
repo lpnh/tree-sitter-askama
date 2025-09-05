@@ -48,13 +48,24 @@ static inline bool is_space(int32_t c) {
   return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }
 
+// Another helper function, this one is for whitespace control operators
+static inline bool is_whitespace_control(int32_t c) {
+  return c == '-' || c == '+' || c == '~';
+}
+
 /*
  * Nested comment scanner
  *
- * Our job here is to find matching comment delimiters.
+ * Our task here is to find matching comment delimiters.
  *
- * Each opening comment `{#` makes us go deeper.
- * Each closing comment `#}` makes us go back up.
+ * The parser calls us after consuming the outer opening comment,
+ * and we continue the job until just before the outer closing one.
+ *
+ * Comments can start with: {#, {#-, {#+, {#~
+ * And end with their counterparts: #}, -#}, +#}, ~#}
+ *
+ * Each opening comment makes us go deeper.
+ * Each closing comment makes us go back up.
  *
  * The `depth` counter tracks our current nesting level.
  */
@@ -62,29 +73,43 @@ static bool scan_nested_comment(TSLexer *lexer) {
   int depth = 1; // If we got here, we're already inside a comment
 
   while (lexer->lookahead != 0) {
+    // We start looking for opening comments
     if (lexer->lookahead == '{') {
       lexer->advance(lexer, false);
       if (lexer->lookahead == '#') {
+        lexer->advance(lexer, false);
+        // Check for optional whitespace control after `{#`
+        if (is_whitespace_control(lexer->lookahead)) {
+          lexer->advance(lexer, false);
+        }
         depth++;
+        continue;
+      }
+    }
+    // Now we are looking for closing comments...
+    if (is_whitespace_control(lexer->lookahead) || lexer->lookahead == '#') {
+      lexer->mark_end(lexer); // ...so make sure to not lose anything hereafter
+      if (is_whitespace_control(lexer->lookahead)) {
         lexer->advance(lexer, false);
       }
-    } else if (lexer->lookahead == '#') {
-      lexer->mark_end(lexer); // Each `#` could be our last endpoint
-      lexer->advance(lexer, false);
-      if (lexer->lookahead == '}') {
-        depth--;
+      if (lexer->lookahead == '#') {
         lexer->advance(lexer, false);
-        if (depth == 0) {
-          return true; // There and back again
+        if (lexer->lookahead == '}') {
+          // Definitely a closing comment... Can we go home now?
+          if (depth == 1) {
+            return true; // There and back again
+          }
+          lexer->advance(lexer, false);
+          depth--;
+          continue;
         }
       }
-    } else {
-      lexer->advance(lexer, false); // Keep going
     }
+    lexer->advance(lexer, false); // Keep going
   }
 
   // If there's no text left to look ahead...
-  // ...why is there still some comments to be closed?
+  // ...why are there still comments to be closed?
   return false;
 }
 
@@ -111,12 +136,11 @@ static bool is_it_endraw_yet(TSLexer *lexer) {
   }
   lexer->advance(lexer, false);
 
-  // Ok, we have `{%`
+  // Okay, we have `{%`
 
   // Check for Askama whitespace control characters: -, +, or ~
   // The `{%` fancy variants: {%-, {%+, {%~
-  if (lexer->lookahead == '-' || lexer->lookahead == '+' ||
-      lexer->lookahead == '~') {
+  if (is_whitespace_control(lexer->lookahead)) {
     lexer->advance(lexer, false); // Found one, lol
   }
 
