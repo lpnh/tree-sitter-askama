@@ -208,6 +208,8 @@ static bool scan_raw_content(TSLexer *lexer) {
  */
 bool tree_sitter_askama_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
+  (void)payload; // Silence unused parameter warning
+
   // Is this the end of the file?
   if (lexer->eof(lexer)) {
     return false; // Nothing is left to tell
