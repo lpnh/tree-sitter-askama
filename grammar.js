@@ -8,13 +8,14 @@
 // @ts-check
 
 const PREC = {
-  calls: 16,
-  macro_calls: 15,
-  field: 14,
-  try: 13,
-  unary: 12,
-  filter: 11,
-  multiplicative: 10,
+  calls: 17,
+  macro_calls: 16,
+  field: 15,
+  try: 14,
+  unary: 13,
+  filter: 12,
+  multiplicative: 11,
+  concat: 10,
   additive: 9,
   shift: 8,
   bitand: 7,
@@ -312,7 +313,6 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.is_defined_expression,
         $.filter_expression,
-        $.string_concatenation,
       ),
 
     binary_expression: $ => {
@@ -325,6 +325,7 @@ module.exports = grammar({
         [PREC.bitand, 'bitand'],
         [PREC.shift, choice('<<', '>>')],
         [PREC.additive, choice('+', '-')],
+        [PREC.concat, '~'],
         [PREC.multiplicative, choice('*', '/', '%')],
       ];
 
@@ -343,9 +344,6 @@ module.exports = grammar({
         ),
       );
     },
-
-    string_concatenation: $ =>
-      seq($.identifier, repeat1(seq('~', $.identifier))),
 
     is_defined_expression: $ =>
       seq($.identifier, seq(choice('is', 'is not'), 'defined')),
@@ -482,7 +480,7 @@ module.exports = grammar({
       token(
         seq(
           optional('b'),
-          '\'',
+          "'",
           optional(
             choice(
               seq(
@@ -497,7 +495,7 @@ module.exports = grammar({
               /[^\\']/,
             ),
           ),
-          '\'',
+          "'",
         ),
       ),
 

@@ -1152,9 +1152,10 @@ string_concatenation
 
 (source
   (render_expression
-    (string_concatenation
-      (identifier)
-      (identifier)
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (identifier))
       (identifier)))
   (content))
 
