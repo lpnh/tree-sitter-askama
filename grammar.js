@@ -8,11 +8,12 @@
 // @ts-check
 
 const PREC = {
-  calls: 17,
-  macro_calls: 16,
-  field: 15,
-  try: 14,
-  unary: 13,
+  calls: 18,
+  macro_calls: 17,
+  field: 16,
+  try: 15,
+  unary: 14,
+  cast: 13,
   filter: 12,
   multiplicative: 11,
   concat: 10,
@@ -44,6 +45,8 @@ const numericTypes = [
   'f32',
   'f64',
 ];
+
+const primitiveTypes = numericTypes.concat(['bool', 'str', 'char']);
 
 module.exports = grammar({
   name: 'askama',
@@ -293,6 +296,13 @@ module.exports = grammar({
 
     endcall_statement: _ => 'endcall',
 
+    _type: $ =>
+      choice(
+        $.scoped_identifier,
+        $.identifier,
+        alias(choice(...primitiveTypes), $.primitive_type),
+      ),
+
     _expression: $ => choice($._expression_except_range, $.range_expression),
 
     _expression_except_range: $ =>
@@ -301,6 +311,7 @@ module.exports = grammar({
         $.reference_expression,
         $.try_expression,
         $.binary_expression,
+        $.type_cast_expression,
         $.call_expression,
         $._literal,
         $.identifier,
@@ -370,6 +381,12 @@ module.exports = grammar({
           '!',
           alias($.arguments, $.token_tree),
         ),
+      ),
+
+    type_cast_expression: $ =>
+      prec.left(
+        PREC.cast,
+        seq(field('value', $._expression), 'as', field('type', $._type)),
       ),
 
     call_expression: $ =>
@@ -480,7 +497,7 @@ module.exports = grammar({
       token(
         seq(
           optional('b'),
-          "'",
+          '\'',
           optional(
             choice(
               seq(
@@ -495,7 +512,7 @@ module.exports = grammar({
               /[^\\']/,
             ),
           ),
-          "'",
+          '\'',
         ),
       ),
 

@@ -14,3 +14,25 @@ field_and_string_concat
         (field_identifier))
       (string_literal)))
   (content))
+
+================================================================================
+usize_cast
+================================================================================
+
+{% let category_index = (status_code / 100 - 1) as usize %}
+
+--------------------------------------------------------------------------------
+
+(source
+  (control_tag
+    (let_statement
+      (identifier)
+      (type_cast_expression
+        (parenthesized_expression
+          (binary_expression
+            (binary_expression
+              (identifier)
+              (number_literal))
+            (number_literal)))
+        (primitive_type))))
+  (content))
